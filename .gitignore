@@ -1,0 +1,27 @@
+# AI assistant / agent files — kept local-only on this public repo
+CLAUDE.md
+.claude/
+AGENTS.md
+.cursorrules
+.cursor/
+
+# Dependencies (defensive — this repo has no build pipeline today)
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
