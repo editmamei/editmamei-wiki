@@ -1,6 +1,8 @@
 # Getting started
 
-This guide walks you through your first Editmamei session, from ping test to first real edit. It assumes you've already done the [installation](installation.md).
+This guide walks you through your first Editmamei session — from confirming Photoshop is connected to making your first real edit. It assumes you've already done the [installation](installation.md).
+
+The pattern throughout is the same: **you describe what you want in plain words; the AI plans it; your Photoshop carries it out.** You're not learning a new app — you're learning to ask for what you already know how to do.
 
 ---
 

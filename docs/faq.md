@@ -12,6 +12,10 @@ Like **edamame** (ed-a-MAH-may) — yes, the soybean. If you've ever ordered it 
 
 No. Editmamei is an independent product. It is not affiliated with, endorsed by, or sponsored by Adobe Inc. "Adobe" and "Photoshop" are registered trademarks of Adobe Inc.
 
+### Does Editmamei generate pixels with AI?
+
+No. Editmamei is an *orchestration* layer, not a *generation* layer. The AI assistant plans the steps — which adjustments, which selections, in what order — and Photoshop carries them out using its own standard non-generative tools (adjustment layers, masks, selections, filters). Your pixels are only ever changed by Photoshop itself; no generative model touches them. "AI orchestration, not generation" is the short version.
+
 ### Is Editmamei open source?
 
 The compiled Community Edition binary is freely available on npm, but the source is proprietary. See the [LICENSE on editmamei.com](https://editmamei.com/license) for the full text. Third-party open-source dependencies retain their original licenses — full list in the `NOTICES.md` bundled with the npm package.
@@ -48,11 +52,11 @@ No. Editmamei drives Photoshop through Windows COM automation or macOS AppleScri
 
 The Editmamei server itself makes no outbound network connections of its own in the Community Edition. The Pro Edition adds one Editmamei-side call: license validation against the license server, roughly once per 7 days, which sends `{license key, version, OS}` and no document or image data.
 
-Your AI client is separate. Editmamei runs as a stdio subprocess of your AI assistant (Claude Desktop, Cursor, etc.), and that assistant is itself a cloud service governed by its own privacy policy. When you ask the AI to look at a visual preview, Editmamei sends a downscaled JPEG to *that AI provider* on your behalf — exactly as if you'd dropped the file into a chat with it. So an internet connection is required for the AI to function, even if Editmamei the server isn't transmitting anything itself.
+Your AI assistant is separate. Editmamei runs as a stdio subprocess of your AI assistant (Claude Desktop, Cursor, etc.), and that assistant is itself a cloud service governed by its own privacy policy. When you ask the AI to look at a visual preview, Editmamei sends a downscaled JPEG to *that AI provider* on your behalf — exactly as if you'd dropped the file into a chat with it. So an internet connection is required for the AI to function, even if Editmamei the server isn't transmitting anything itself.
 
 ### Does it need Generative Fill / Adobe cloud features?
 
-No. Editmamei runs against the standard ExtendScript automation surface, which has been in every Photoshop install since the early 2010s. Generative Fill is optional and only used by tools that explicitly call it.
+No. Editmamei runs against the standard ExtendScript automation surface, which has been in every Photoshop install since the early 2010s. No tool that ships in the current build invokes Generative Fill or any other Adobe generative feature — Editmamei is an orchestration layer, not a generation layer.
 
 ### Does Editmamei work with Photoshop Elements?
 

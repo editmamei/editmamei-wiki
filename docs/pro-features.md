@@ -1,6 +1,8 @@
 # Pro features
 
-Editmamei ships in two editions from a single npm package. The same `editmamei` install gives you Community by default; activating a Pro license unlocks the Pro tool surface on the next MCP-client restart.
+Editmamei ships in two editions from a single npm package. The same `editmamei` install gives you Community by default; activating a Pro license unlocks the Pro tool surface on the next AI-client restart.
+
+Both editions follow the same rule: AI orchestration, not generation. Photoshop edits with its own real tools; Pro just gives the AI a deeper toolkit to orchestrate.
 
 This page describes the line between Community and Pro at v1.0. The split may evolve over time — see [editmamei.com/pricing](https://editmamei.com/pricing) for the current state.
 
@@ -12,7 +14,7 @@ This page describes the line between Community and Pro at v1.0. The split may ev
 editmamei license activate <your-license-key>
 ```
 
-Restart your MCP client. The Pro tools appear in the available-tools list.
+Restart your AI client. The Pro tools appear in the available-tools list.
 
 To check current license status:
 

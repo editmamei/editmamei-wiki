@@ -47,6 +47,14 @@ Today's Pro adjustment-layer set is the basics. Post-v1.0 fills in:
 
 Free-transform with skew, perspective, and distort. Selection-modify primitives (expand, contract, smooth, border). The basic transforms (scale / rotate / move / fit) are already in CE; these are the advanced operations that aren't.
 
+### Provenance Mode
+
+A user-level setting controlling whether Editmamei may invoke Photoshop's *native* generative tools (Generative Fill and the like). **Defaults OFF.** Enabling generative use is an explicit, active user decision.
+
+When OFF (default): no generative pixels, no AI-generation provenance metadata; optionally strip stray C2PA/IPTC AI-generation metadata on export so the file is verifiably clean.
+
+Once Provenance Mode ships, public copy that describes Editmamei's non-generative posture gets revised to be mode-scoped ("Provenance Mode guarantees…") rather than a blanket product claim. Until it ships, the current build orchestrates only non-generative Photoshop tools by virtue of which tools are registered — there's no toggle to flip.
+
 ---
 
 ## Watching, not committed
