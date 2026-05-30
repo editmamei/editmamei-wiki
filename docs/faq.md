@@ -46,7 +46,9 @@ No. Editmamei drives Photoshop through Windows COM automation or macOS AppleScri
 
 ### Does it need an internet connection?
 
-No, for normal operation. The Community Edition makes zero outbound network connections. The Pro Edition contacts the license server roughly once per 7 days to verify subscription status — that's the only network call, and it sends no document or image data.
+The Editmamei server itself makes no outbound network connections of its own in the Community Edition. The Pro Edition adds one Editmamei-side call: license validation against the license server, roughly once per 7 days, which sends `{license key, version, OS}` and no document or image data.
+
+Your AI client is separate. Editmamei runs as a stdio subprocess of your AI assistant (Claude Desktop, Cursor, etc.), and that assistant is itself a cloud service governed by its own privacy policy. When you ask the AI to look at a visual preview, Editmamei sends a downscaled JPEG to *that AI provider* on your behalf — exactly as if you'd dropped the file into a chat with it. So an internet connection is required for the AI to function, even if Editmamei the server isn't transmitting anything itself.
 
 ### Does it need Generative Fill / Adobe cloud features?
 
