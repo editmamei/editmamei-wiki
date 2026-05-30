@@ -51,11 +51,11 @@ Editmamei exposes ~80 Photoshop operations as MCP tools — each with structured
 
 - **Documents** — open, save, export, close; full format coverage (PSD, JPEG, PNG, TIFF, DNG, HEIC, raw)
 - **Layers** — create, duplicate, delete, rename, reorder, group, merge, flatten; opacity, blend mode, visibility, locking
-- **Smart selections** — Select Subject, Select Sky, Color Range, Magic Wand, plus rectangle/feather; rich selection feedback
+- **Smart selections** — Color Range, Magic Wand, plus rectangle/feather; rich selection feedback. Pro adds Sensei-backed Select Subject and Select Sky.
 - **Non-destructive adjustments** — Curves, Levels, Hue/Saturation, Brightness/Contrast as adjustment layers
 - **Filters** — Gaussian Blur, Motion Blur, Sharpen, Add Noise; layer styles (drop shadow, stroke, outer glow)
-- **Templates** — save the current edit as a reproducible recipe; apply later to new images
-- **Visual verification** — downscaled preview JPEGs and per-channel histograms returned inline
+- **Templates** — apply built-in recipes to new images; create your own with Pro
+- **Visual verification** — downscaled preview JPEGs returned inline. Pro adds per-channel histograms with mean/stdev/median.
 - **History & Actions** — undo, redo, jump to state; play recorded Photoshop Actions
 
 You stay in command: co-edit with your AI in real time, then save the result as a reusable recipe and batch it across a shoot — a recipe *you* designed, not a fixed pipeline.
@@ -69,15 +69,15 @@ Full feature breakdown at [editmamei.com](https://editmamei.com).
 | | Community | Pro |
 |---|---|---|
 | Core editing surface (documents, layers, basic adjustments, filters, selections, masks) | ✅ | ✅ |
-| Templates system | | ✅ |
-| Full non-destructive workflow surface | | ✅ |
-| Smart Object lifecycle tools | | ✅ |
+| Apply built-in templates | ✅ | ✅ |
+| Create / save / delete custom templates | | ✅ |
+| Sensei-backed selections (Select Subject, Select Sky) | | ✅ |
+| Per-channel histograms | | ✅ |
 | Expanded adjustment-layer types | | ✅ |
-| Advanced selection refinement | | ✅ |
 | Channels, paths, vector masks | | ✅ |
 | Priority support | | ✅ |
 
-Detailed comparison and pricing at [editmamei.com/pricing](https://editmamei.com/pricing). See [docs/pro-features.md](docs/pro-features.md) for the full Pro tool list.
+The Pro tool list lives in [docs/pro-features.md](docs/pro-features.md); the roadmap for what's coming after v1.0 is in [docs/roadmap.md](docs/roadmap.md). Detailed comparison and pricing at [editmamei.com/pricing](https://editmamei.com/pricing).
 
 ---
 

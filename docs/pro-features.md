@@ -41,9 +41,12 @@ The Community edition covers the core editing surface most photographers need da
 - **Filters** — Gaussian Blur, Motion Blur, Sharpen, Add Noise
 - **Selections** — Rectangle, Select All, Deselect, Invert, Feather
 - **Layer masks** — create from selection, apply, delete
+- **Layer styles** — drop shadow, stroke, outer glow, inner shadow
+- **Selections** — Color Range, Magic Wand (alongside Rectangle / Select All / Deselect / Invert / Feather)
+- **Templates** — apply built-in templates (CE ships with a small starter set) and list available templates. Creating, saving, editing, and deleting templates is Pro.
 - **History** — undo, redo, get history states, jump to state
 - **Actions** — list, play recorded Photoshop Actions
-- **Preview & inspection** — downscaled preview JPEG, per-channel histogram, document info, layer tree
+- **Preview & inspection** — downscaled preview JPEG, document info, layer tree (per-channel histograms are Pro)
 - **Text** — create text layers, set font / size / color / alignment
 - **Image placement** — place files, fit to document
 - **Escape hatch** — `photoshop_execute_script` for arbitrary ExtendScript when no specific tool fits
@@ -56,48 +59,42 @@ This is enough to drive a full landscape or product editing workflow in conversa
 
 Pro extends the surface for professional non-destructive workflows, batch editing, and reproducible aesthetic recipes.
 
-### Templates system
+### Templates system — authoring side
 
-The Templates system is the headline Pro feature. A template is a reproducible aesthetic recipe — capture the current edit as a named bundle, then apply it later to new images.
+A template is a reproducible aesthetic recipe — capture the current edit as a named bundle, then apply it later to new images. The authoring side is Pro; applying templates (your own or the CE built-ins) is Community.
 
 - `photoshop_template_create_evidence` — gathers session evidence (tool calls, history states, metadata snapshot) and renders before/after previews
 - `photoshop_template_save` — saves the template bundle to `~/.editmamei/templates/<slug>/`
-- `photoshop_template_apply` — applies a saved template, the AI reads its own previous reasoning to recreate the look
-- `photoshop_template_list` / `photoshop_template_delete`
+- `photoshop_template_delete` — removes a saved template
 
-Templates are how editing decisions become repeatable rather than one-shots. The AI uses its own captured reasoning to drive the existing pipeline tools on a new image, self-judging against the template's exit criteria.
+CE users get `photoshop_template_apply` and `photoshop_template_list` (above, under Community) plus a small set of built-in templates that ship with the package; they cannot create, save, or delete templates. Pro adds the authoring tools so editing decisions become repeatable rather than one-shots — the AI uses its own captured reasoning to drive the existing pipeline tools on a new image, self-judging against the template's exit criteria.
 
 ### Non-destructive adjustment layers
 
 Curves, Levels, Hue/Saturation, Brightness/Contrast as **adjustment layers** rather than direct bakes — editable, maskable, removable. Selection-aware: an active selection at call time becomes the new adjustment's mask automatically. Clip-to-below for targeted edits.
 
-### Smart selection surface
+### Sensei-backed selections
 
 - `photoshop_select_subject` — Sensei-backed subject isolation
 - `photoshop_select_sky` — Sensei-backed sky selection
-- `photoshop_select_color_range` — selection by color similarity
-- `photoshop_magic_wand_select` — contiguous-pixel selection by tolerance
-- `photoshop_refine_selection_edge` — edge refinement with smoothing, contrast, shift
 
-Every selection returns a rich feedback bundle — area coverage, edge complexity, partial-vs-full pixel counts — so the AI can verify a selection actually grabbed what was intended before committing.
+Every selection returns a rich feedback bundle — area coverage, edge complexity, partial-vs-full pixel counts — so the AI can verify a selection actually grabbed what was intended before committing. The non-Sensei selection tools (Color Range, Magic Wand, rectangle, feather) are in Community.
 
-### Layer styles
+### Per-channel histograms
 
-Drop shadow, stroke, outer glow, inner shadow as full layer styles — settings exposed, editable after creation.
-
-### Advanced transforms
-
-Free-transform with skew / perspective / distort. Selection-modify primitives (expand / contract / smooth / border).
+- `photoshop_get_histogram` — 256-bin distribution for any channel with mean / stdev / median, returned inline so the AI can confirm an operation actually changed pixels.
 
 ### Coming in Pro post-v1.0
 
-The Pro roadmap (see [editmamei.com/roadmap](https://editmamei.com/roadmap)):
+Roadmap items live in [`roadmap.md`](roadmap.md) (also at [editmamei.com/roadmap](https://editmamei.com/roadmap)). Highlights:
 
-- Smart Objects with editable contents
+- Smart Objects with editable contents and Smart Object lifecycle tools
 - Smart Filters
 - Channels and alpha-channel storage
 - Vector paths and vector masks
 - Complete adjustment-layer type catalog (Color Balance, Vibrance, Photo Filter, Selective Color, Channel Mixer, Gradient Map)
+- `photoshop_refine_selection_edge`
+- Advanced transforms (skew / perspective / distort, selection-modify primitives)
 
 When this lands, Editmamei Pro becomes a complete AI-driven non-destructive editor.
 
