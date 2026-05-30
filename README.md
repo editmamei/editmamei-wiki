@@ -10,7 +10,7 @@
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-blue.svg)](https://editmamei.com/license)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS-lightgrey.svg)]()
 
-You describe the edit in plain words. The AI plans the steps. Your own copy of Photoshop carries them out — using its standard adjustment layers, masks, selections, and filters. The AI directs; Photoshop edits. Your pixels are only ever changed by Photoshop — never invented or synthesized by a generative model.
+You describe the edit in plain words. The AI plans the steps. Your own copy of Photoshop carries them out, using its standard adjustment layers, masks, selections, and filters. The AI directs; Photoshop edits. No generative model touches your pixels.
 
 This repository is the **public face** of Editmamei. It hosts the user-facing documentation, the issue tracker, and the changelog. The source for the npm package itself is private; what you install from npm is the same compiled artifact described in these docs.
 
@@ -40,14 +40,14 @@ You'll see your Photoshop version returned. Full setup walkthrough in [docs/gett
 
 **You talk. Photoshop works.**
 
-For years, getting the look in your head meant nudging sliders and hunting for a tutorial that matched your exact shot. Editmamei plugs your AI chat assistant straight into the desktop Photoshop you already have. You describe what you want in plain words — like you'd tell a friend — and it builds the layers, makes the adjustments, and hands back the finished photo.
+For years, getting the look in your head meant nudging sliders and hunting for a tutorial that matched your exact shot. Editmamei plugs your AI chat assistant straight into the desktop Photoshop you already have. You describe what you want in plain words, like you'd tell a friend, and it builds the layers, makes the adjustments, and hands back the finished photo.
 
 Here's what's actually happening:
 
 1. **You describe the edit** in plain language ("warm up the golden hour, lift the shadows, clean up the horizon").
-2. **The AI plans the steps** — which adjustments, which selections, in what order.
+2. **The AI plans the steps:** which adjustments, which selections, in what order.
 3. **Your Photoshop does the editing** on your machine, using its own standard tools.
-4. **You get a finished photo** that's fully layered, maskable, and editable — nothing baked in.
+4. **You get a finished photo** that's fully layered, maskable, and editable. Nothing baked in.
 
 The AI looks at the result and refines it; Photoshop performs every actual change.
 
@@ -62,13 +62,13 @@ flowchart LR
 
 ### Edited, not generated
 
-Most "AI photo" tools are *generative* — they invent new pixels: skies, objects, even faces that were never in your shot. **Editmamei doesn't do that.** It works only with the pixels you captured, using the same non-generative Photoshop tools professionals have used for years — adjustment layers, masks, selections, filters. The AI is the director, not the artist. Your photo is yours, just finished faster.
+Most "AI photo" tools are *generative*. They invent new pixels: skies, objects, even faces that were never in your shot. **Editmamei doesn't do that.** It works only with the pixels you captured, using the same non-generative Photoshop tools professionals have used for years: adjustment layers, masks, selections, filters. The AI is the director, not the artist. Your photo is yours, just finished faster.
 
 ### Your files, your machine
 
 Editmamei runs on your own computer, and the editing happens inside your own Photoshop. Editmamei itself ships no analytics, crash reports, or telemetry, and your photo files aren't uploaded to Editmamei's servers.
 
-Worth being clear about: your AI assistant is a cloud service. When you ask it to analyze an image — for example, the visual-verification preview — a downscaled JPEG is sent to *that AI provider*, exactly as if you'd dropped the file into a chat with it. That's a property of using a cloud AI and a function of which assistant you choose — not a hop Editmamei adds.
+Worth being clear about: your AI assistant is a cloud service. When you ask it to analyze an image (for example, the visual-verification preview), a downscaled JPEG is sent to *that AI provider*, exactly as if you'd dropped the file into a chat with it. That's a property of using a cloud AI, and a function of which assistant you choose. Not a hop Editmamei adds.
 
 ---
 
@@ -77,13 +77,13 @@ Worth being clear about: your AI assistant is a cloud service. When you ask it t
 - **Node.js** 20 or later
 - **Adobe Photoshop** 2022 or later (2024+ recommended)
 - **Operating system:** Windows 10/11 or macOS 12+
-- An **AI assistant** that speaks MCP — Claude Desktop, Cursor, Claude Code, or any other MCP-compatible client
+- An **AI assistant** that speaks MCP, such as Claude Desktop, Cursor, Claude Code, or any other MCP-compatible client
 
 ---
 
 ## What it does
 
-Editmamei gives your AI assistant a working photographer's toolkit inside Photoshop. Your AI calls these as building blocks in service of whatever you actually want — so Photoshop responds to *"make the sky more dramatic but keep the foreground natural"* instead of *Layer → New Adjustment Layer → Curves → drag the curve up at the highlight end.*
+Editmamei gives your AI assistant a working photographer's toolkit inside Photoshop. Your AI calls these as building blocks in service of whatever you actually want, so Photoshop responds to *"make the sky more dramatic but keep the foreground natural"* instead of *Layer → New Adjustment Layer → Curves → drag the curve up at the highlight end.*
 
 - **Documents** — open, save, export, close; full format coverage (PSD, JPEG, PNG, TIFF, DNG, HEIC, raw)
 - **Layers** — create, duplicate, delete, rename, reorder, group, merge, flatten; opacity, blend mode, visibility, locking
@@ -104,14 +104,23 @@ Full feature breakdown at [editmamei.com](https://editmamei.com).
 
 | | Community | Pro |
 |---|---|---|
-| Core editing surface (documents, layers, basic adjustments, filters, selections, masks) | ✅ | ✅ |
+| Documents (open, save, export; PSD, JPEG, PNG, TIFF, DNG, HEIC, raw) | ✅ | ✅ |
+| Layers (create, duplicate, group, merge, transform, reorder, properties) | ✅ | ✅ |
+| Non-destructive adjustments (Curves, Levels, Hue/Saturation, Brightness/Contrast) | ✅ | ✅ |
+| Filters (Gaussian Blur, Motion Blur, Sharpen, Add Noise) | ✅ | ✅ |
+| Smart selections (Color Range, Magic Wand, rectangle, feather, with rich feedback) | ✅ | ✅ |
+| Masks (create from selection, apply, delete) | ✅ | ✅ |
+| Layer styles + text (drop shadow, stroke, glow; font, color, alignment) | ✅ | ✅ |
+| History + Actions (undo, redo, jump to state, play recorded Photoshop Actions) | ✅ | ✅ |
+| Visual preview (inline JPEGs so the AI can see what just changed) | ✅ | ✅ |
 | Apply built-in templates | ✅ | ✅ |
 | Create / save / delete custom templates | | ✅ |
 | Sensei-backed selections (Select Subject, Select Sky) | | ✅ |
 | Per-channel histograms | | ✅ |
-| Priority support | | ✅ |
 
-What's *coming* in Pro after v1.0 — Smart Objects, Smart Filters, channels and vector masks, the rest of the adjustment-layer catalog, refined selection edges, advanced transforms — lives in [docs/roadmap.md](docs/roadmap.md), not on this table. The Pro tool list as it ships today is in [docs/pro-features.md](docs/pro-features.md). Detailed comparison and pricing at [editmamei.com/pricing](https://editmamei.com/pricing).
+Community covers the full working-photographer editing surface. Pro adds three specific upgrades: authoring your own templates, the Sensei selection models for Subject and Sky, and per-channel histograms for measuring an edit against the pixels.
+
+What's *coming* in Pro after v1.0 (Smart Objects, Smart Filters, channels and vector masks, the rest of the adjustment-layer catalog, refined selection edges, advanced transforms) lives in [docs/roadmap.md](docs/roadmap.md), not on this table. The Pro tool list as it ships today is in [docs/pro-features.md](docs/pro-features.md). Detailed comparison and pricing at [editmamei.com/pricing](https://editmamei.com/pricing).
 
 ---
 

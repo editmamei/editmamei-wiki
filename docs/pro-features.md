@@ -71,10 +71,6 @@ A template is a reproducible aesthetic recipe — capture the current edit as a 
 
 CE users get `photoshop_template_apply` and `photoshop_template_list` (above, under Community) plus a small set of built-in templates that ship with the package; they cannot create, save, or delete templates. Pro adds the authoring tools so editing decisions become repeatable rather than one-shots — the AI uses its own captured reasoning to drive the existing pipeline tools on a new image, self-judging against the template's exit criteria.
 
-### Non-destructive adjustment layers
-
-Curves, Levels, Hue/Saturation, Brightness/Contrast as **adjustment layers** rather than direct bakes — editable, maskable, removable. Selection-aware: an active selection at call time becomes the new adjustment's mask automatically. Clip-to-below for targeted edits.
-
 ### Sensei-backed selections
 
 - `photoshop_select_subject` — Sensei-backed subject isolation
