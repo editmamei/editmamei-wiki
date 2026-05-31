@@ -1,6 +1,6 @@
 # Installation
 
-Editmamei is distributed as an npm package. The `editmamei install` subcommand registers Editmamei with **Claude Desktop**. For Cursor or Claude Code, see [Manual configuration](#manual-configuration) below.
+Editmamei is distributed as an npm package. The `editmamei install` subcommand detects which MCP clients you have and writes the appropriate config for each — Claude Desktop, Cursor, and Claude Code in one pass. Manual configuration is still documented below as a fallback.
 
 ---
 
@@ -34,21 +34,29 @@ This installs the `editmamei` CLI globally.
 
 ---
 
-## Register with Claude Desktop
+## Register with your MCP client(s)
 
 ```bash
 editmamei install
 ```
 
-This subcommand:
+`editmamei install` runs against every supported client in one pass and prints a per-client result line. The clients today are:
 
-1. Resolves Claude Desktop's config path on your OS (`%APPDATA%\Claude\claude_desktop_config.json` on Windows, `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS).
-2. Backs up the existing config to `claude_desktop_config.json.bak` (only on the first run, to preserve your pre-install state).
+| Client | Detection | Config touched |
+|---|---|---|
+| **Claude Desktop** | always written (canonical client) | `%APPDATA%\Claude\claude_desktop_config.json` (Windows) or `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) |
+| **Cursor** | written if `~/.cursor/` exists or `cursor` is on your PATH | `~/.cursor/mcp.json` |
+| **Claude Code** | written if the `claude` binary is on your PATH | uses `claude mcp add --scope user editmamei -- npx -y editmamei` under the hood |
+
+For each detected client, the command:
+
+1. Reads the existing config (refuses to overwrite if the JSON is malformed — fix that first).
+2. Backs up the existing file to `<config>.bak` only if no `.bak` is already there. The pre-install state is more valuable than any of our own first-run output, so a second install never clobbers the original backup.
 3. Adds an `editmamei` entry to `mcpServers`, or no-ops if the entry already matches.
 
-Restart Claude Desktop after this completes — config changes only take effect on a fresh boot.
+If a client isn't detected, that line is reported as "skipped" — it doesn't abort the run.
 
-**Other MCP clients** (Cursor, Claude Code, anything else MCP-compatible) — `editmamei install` does not currently auto-configure these. Use the [Manual configuration](#manual-configuration) steps below.
+Restart your AI client(s) after this completes — config changes only take effect on a fresh boot.
 
 ### Check your install state
 
@@ -56,13 +64,13 @@ Restart Claude Desktop after this completes — config changes only take effect 
 editmamei status
 ```
 
-Reports your platform, Node version, detected Photoshop install (if any), and whether Claude Desktop's config has the editmamei entry. Run this when troubleshooting.
+Reports, per client, whether Editmamei is registered and what command would launch it. Run this when troubleshooting.
 
 ---
 
 ## Manual configuration
 
-If `editmamei install` reports it couldn't write the config — for example, because Claude Desktop isn't installed — or you're using Cursor / Claude Code / another MCP client, register Editmamei by hand.
+If `editmamei install` couldn't reach one of your clients — for example, because the `claude` binary isn't on your PATH, or you're using a different MCP-compatible client — register Editmamei by hand.
 
 ### Claude Desktop
 

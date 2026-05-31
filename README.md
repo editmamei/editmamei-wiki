@@ -28,7 +28,7 @@ npm install -g editmamei
 editmamei install
 ```
 
-`editmamei install` registers Editmamei with **Claude Desktop**. For Cursor or Claude Code, follow the [manual configuration steps](docs/installation.md#manual-configuration). Then restart your MCP client and ask it to ping Photoshop:
+`editmamei install` detects which MCP clients you have (Claude Desktop, Cursor, Claude Code) and writes the appropriate config for each — in one pass. Each client gets its own per-client result line so you can see what was touched. Then restart your AI client(s) and ask one of them to ping Photoshop:
 
 > "Is Photoshop connected?"
 
