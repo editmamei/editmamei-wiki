@@ -10,7 +10,7 @@
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-blue.svg)](https://editmamei.com/license)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS-lightgrey.svg)]()
 
-You describe the edit in plain words. The AI plans the steps. Your own copy of Photoshop carries them out, using its standard adjustment layers, masks, selections, and filters. The AI directs; Photoshop edits. No generative model touches your pixels.
+You describe the edit. The AI plans the steps. Your own copy of Photoshop carries them out, using its standard adjustment layers, masks, selections, and filters. The AI directs; Photoshop edits. No generative model touches your pixels.
 
 This repository is the **public face** of Editmamei. It hosts the user-facing documentation, the issue tracker, and the changelog. The source for the npm package itself is private; what you install from npm is the same compiled artifact described in these docs.
 
@@ -40,11 +40,11 @@ You'll see your Photoshop version returned. Full setup walkthrough in [docs/gett
 
 **You talk. Photoshop works.**
 
-For years, getting the look in your head meant nudging sliders and hunting for a tutorial that matched your exact shot. Editmamei plugs your AI chat assistant straight into the desktop Photoshop you already have. You describe what you want in plain words, like you'd tell a friend, and it builds the layers, makes the adjustments, and hands back the finished photo.
+For years, getting the look in your head meant nudging sliders and hunting for a tutorial that matched your exact shot. Editmamei plugs your AI chat assistant straight into the desktop Photoshop you already have. You describe what you want, the way you'd tell a friend, and it builds the layers, makes the adjustments, and hands back the finished photo.
 
 Here's what's actually happening:
 
-1. **You describe the edit** in plain language ("warm up the golden hour, lift the shadows, clean up the horizon").
+1. **You describe the edit** ("warm up the golden hour, lift the shadows, clean up the horizon").
 2. **The AI plans the steps:** which adjustments, which selections, in what order.
 3. **Your Photoshop does the editing** on your machine, using its own standard tools.
 4. **You get a finished photo** that's fully layered, maskable, and editable. Nothing baked in.
