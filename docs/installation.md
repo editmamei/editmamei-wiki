@@ -52,11 +52,22 @@ For each detected client, the command:
 
 1. Reads the existing config (refuses to overwrite if the JSON is malformed — fix that first).
 2. Backs up the existing file to `<config>.bak` only if no `.bak` is already there. The pre-install state is more valuable than any of our own first-run output, so a second install never clobbers the original backup.
-3. Adds an `editmamei` entry to `mcpServers`, or no-ops if the entry already matches.
+3. Adds an `editmamei` entry to `mcpServers`, or no-ops if the entry already matches. Any env vars you've hand-added to the `editmamei` entry (e.g. `LOG_LEVEL`) are preserved — install only overrides the keys it explicitly sets.
 
 If a client isn't detected, that line is reported as "skipped" — it doesn't abort the run.
 
 Restart your AI client(s) after this completes — config changes only take effect on a fresh boot.
+
+### Options
+
+- `--dev` — register the locally-built binary at the path you're invoking from instead of `npx -y editmamei`. Used for testing local changes.
+- `--photoshop-path <path>` — bake an absolute path to your Photoshop binary into the MCP server entry as the `PHOTOSHOP_PATH` env var, across every detected client. Use when Photoshop is installed somewhere the auto-detector can't find (custom drive letter, side-by-side installs, beta tracks, etc.). Example:
+
+  ```bash
+  editmamei install --photoshop-path "D:\\Adobe\\Photoshop 2025\\Photoshop.exe"
+  ```
+
+  Equivalent to hand-editing `env: { "PHOTOSHOP_PATH": "..." }` into the `editmamei` entry of every config the install touches.
 
 ### Check your install state
 
