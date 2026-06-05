@@ -12,6 +12,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.4.1] — 2026-06-05
+
+PATCH bump for one snippet-level silent-no-op bug in `photoshop_create_group`. The 2026-06-04 IMG_1022 session called `create_group(layers=["Warm — 81", "Curves — S-pop", "Vibrance", "Levels — contrast"])` and got back `moved_count: 1` — only `"Vibrance"` (the one name without an em-dash) matched. The other three landed in `not_found` silently because the snippet's `findLayerByName` used strict ASCII `===` instead of the `normNameHelper` dash-tolerant comparison the rest of the group/layer-lookup tools already use. Same class of bug as the original Bug I in `move_layer_to_group` (fixed 2026-05-29); the fix didn't propagate.
+
+### Fixed
+
+- **`photoshop_create_group` with a `layers` list** now matches layer names containing em-dash (U+2014), en-dash (U+2013), or other Unicode dash variants when the caller passes ASCII hyphen-minus (or vice versa), and folds case + collapses whitespace runs the same way `photoshop_move_layer_to_group` and `photoshop_select_layer` do. Names that previously fell into `not_found` silently now move into the group correctly.
+
+---
+
 ## [0.4.0] — 2026-06-04
 
 MINOR bump for the 2026-06-03 AM Descriptor Audit remediation pass: six HIGH-severity silent-no-op bug fixes in `src/api/extendscript.ts`, two new clipping-mask tools at `'dev'` tier, schema-completeness additions to several existing tools, and seven new snippet-vs-spec tests pinning the fixes against the V1 AM Event Library specs.
@@ -222,7 +232,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.4.1
 [0.4.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.4.0
 [0.3.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.3.1
 [0.3.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.3.0
