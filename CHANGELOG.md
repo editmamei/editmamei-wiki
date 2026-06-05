@@ -12,6 +12,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.4.2] — 2026-06-05
+
+PATCH bump for a latent template-literal-in-comment bug in `photoshop_move_layer_to_group` that had been broken at runtime on every call since the comment was added. Found by reading the session NDJSON for the IMG_1022 grade — the tool's `error` field captured the exact PS-side syntax error.
+
+### Fixed
+
+- **`photoshop_move_layer_to_group`** — every call had been failing with a PS-side "Expected: ;" syntax error. The snippet's TypeScript-side `//` comment contained `${normNameHelper}` as a literal text reference; template literals evaluate `${}` regardless of comment context, so the helper's multi-line function body got injected into the middle of the comment, the helper's leading newline terminated the `//`, and the trailing comment text parsed as code. The comment is now plain prose; the snippet renders cleanly. (The same em-dash normalization that the snippet was *trying* to apply still works once the snippet actually executes.)
+
+---
+
 ## [0.4.1] — 2026-06-05
 
 PATCH bump for one snippet-level silent-no-op bug in `photoshop_create_group`. The 2026-06-04 IMG_1022 session called `create_group(layers=["Warm — 81", "Curves — S-pop", "Vibrance", "Levels — contrast"])` and got back `moved_count: 1` — only `"Vibrance"` (the one name without an em-dash) matched. The other three landed in `not_found` silently because the snippet's `findLayerByName` used strict ASCII `===` instead of the `normNameHelper` dash-tolerant comparison the rest of the group/layer-lookup tools already use. Same class of bug as the original Bug I in `move_layer_to_group` (fixed 2026-05-29); the fix didn't propagate.
@@ -232,7 +242,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.4.2
 [0.4.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.4.1
 [0.4.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.4.0
 [0.3.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.3.1
