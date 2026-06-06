@@ -12,6 +12,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.5.0] — 2026-06-06
+
+MINOR bump for a performance-focused batch driven by the 2026-06-06 full-tool demo. That session ran 108 tool calls in 71.8 minutes wall clock — but only 1.5 minutes of that was actual tool work. The LLM was spending 45× more time thinking than the tools spent running, with context bloat as the dominant cause. This release attacks the four biggest contributors. It also promotes a previously-hidden tool whose absence was costing the LLM 5 wasted escape-hatch attempts per session, and ships a runtime error rewrite that converts a dead-end failure into a recoverable one.
+
+### Added
+
+- **Layer-mask creation is now a first-class tool.** Previously hidden behind the dev-tier gate (and so excluded from CE + Pro bundles), the tool is now visible to the LLM by default. Without it, sessions trying to add a layer mask burned multiple `photoshop_execute_script` attempts writing the underlying ActionManager descriptor by hand — none of which succeeded.
+  - Tool now available in CE + Pro: `photoshop_create_layer_mask`
+  - Promotion is backed by the 2026-06-04 audit verifying the snippet against `src/spec/ps27/masks/create-reveal-all.ts` and `create-reveal-selection.ts` (Group D verdict OK)
+  - Auto-selects Reveal Selection vs Reveal All based on whether there's an active selection
+  - Handles adjustment layers (which already own a mask slot) via a distinct fill-existing-mask branch
+
+### Changed
+
+- **Property-setter and filter tools no longer flood every response with a full context block.** Tools that change a *property* of the already-active layer (rather than changing *what* is active) now return a slim 3-field context (`{ document_name, activeLayer_name, hasDocument }`) instead of the full 8-field shape (which carried bounds, opacity, blend mode, layer kind, lock state, isBackground, document dimensions, color mode, layer count, and selection state on every call). The full payload was repeating on every call and bloating the conversation by ~300 tokens × number of calls.
+  - Tools affected (14 total): `photoshop_set_layer_opacity`, `set_layer_blend_mode`, `set_layer_visibility`, `set_layer_locked`, `rename_layer` (5 property setters); `photoshop_apply_gaussian_blur`, `apply_sharpen`, `apply_noise`, `apply_motion_blur`, `apply_lens_blur`, `apply_smart_sharpen`, `apply_reduce_noise`, `apply_high_pass`, `apply_shadows_highlights` (9 filters)
+  - Tools that change WHAT is active (create/delete/select/open/save/get_*) continue to return the full context — the LLM needs kind/bounds/blend-mode of newly-active things
+  - The `context` field is still present on every trimmed tool's result; it's just shaped differently
+- **Preview defaults dropped to halve the base64 payload per call.** Verification-grade reads (tone, clipping, composition, mean shift) work fine at smaller dimensions and lower JPEG quality; the bigger defaults were paying token cost for detail the LLM wasn't using.
+  - Tool affected: `photoshop_get_preview`
+  - `max_dimension` default: 1500 → 1024
+  - `quality` default: 8 → 6
+  - The tool's input-schema description now names both new defaults and the "bump higher only when reading fine detail" case for opt-in
+- **Font-not-found errors now list installed font families** so the LLM can pick a near-miss instead of giving up on text styling.
+  - Tool affected: `photoshop_set_text_font`
+  - On failure the error now includes (in priority order): up to 20 family names containing the requested substring (e.g. "Helvetica" finds "HelveticaLTStd-Roman"), then if there's no fuzzy match, a 30-name alphabetical sample with a "(N more)" suffix
+  - Previously the error only said "Font not found" and named one example PostScript name — the LLM had no signal which fonts were actually installed and went silent on subsequent text-styling steps
+
+---
+
 ## [0.4.3] — 2026-06-05
 
 PATCH bump for two histogram-tool bugs found in the same 2026-06-04 IMG_1022 session NDJSON that surfaced v0.4.1 + v0.4.2. The schema advertised features that hadn't been implemented; the snippet now actually delivers them.
@@ -302,7 +332,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.4.3...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.0
 [0.4.3]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.4.3
 [0.4.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.4.2
 [0.4.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.4.1
