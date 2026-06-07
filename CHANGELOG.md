@@ -12,6 +12,42 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.5.1] — 2026-06-07
+
+PATCH bump from the 2026-06-07 deep code audit. The LLM-facing tool surface (names, schemas, descriptions) is unchanged; every change is runtime hardening, observability, or a defensive guard inside `src/`. Eighteen audit findings are addressed in this release — eleven runtime fixes plus seven new test files closing coverage gaps on security-critical helpers (validator, JSX escapes, Pro-tier tool factories, the AM spec registry).
+
+### Fixed
+
+- **Server reports the actual package version over MCP.** The MCP server identified itself as `0.2.0` during `initialize` regardless of which release was running; clients logged the stale value in support bundles. The version is now sourced from a single constant pinned against `package.json` by a startup-time test, so a future release bump that misses one of the two files fails the test suite before it ships.
+  - Source of truth: `src/version.ts`; drift guard: `tests/integration/version.test.ts`
+  - Replaces the hardcoded `'0.2.0'` in `src/core/server.ts`
+- **MCP-config writes are now atomic.** `editmamei install` writes `claude_desktop_config.json` and `~/.cursor/mcp.json` via a tmpfile + rename so a crash mid-write can no longer leave a zero-byte or partial config. A second install run finds no `.bak` to restore from because `backupConfigIfFirstRun` only fires once, so a half-written file was previously unrecoverable.
+  - `writeJsonMcpConfig` in `src/cli/clients/json-config.ts` now mirrors the tmp+rename pattern used by the Pro→CE stub swap in `scripts/lib/build-common.ts`
+- **`LOG_LEVEL` accepts symbolic names instead of silently swallowing every log.** The previous parser called `parseInt(env, 10)` raw — `LOG_LEVEL=debug` returned `NaN`, every log dropped, and users assumed Editmamei was frozen. The new parser accepts both numeric (`0`..`3`) and symbolic (`DEBUG`/`INFO`/`WARN`/`WARNING`/`ERROR`, case-insensitive); unrecognized values fall back to the constructor default with no silent drop.
+  - `parseLogLevel` exported from `src/utils/logger.ts`
+- **`editmamei install` no longer fails on Linux before the router runs.** Constructing a `Session` eagerly built a `PhotoshopConnection`, whose constructor throws on unsupported platforms. CLI subcommands that don't need a live Photoshop (`install`, `uninstall`, `status`) now reach the router before the platform check fires. Tool calls still throw the same actionable error if Photoshop isn't available at first use.
+  - `Session.connection` is now lazy-constructed via `ensureConnection()` in `src/core/session.ts`
+- **Ping now reports which discovery signals degraded.** The session-start liveness check previously mixed defaulted-zero values (action sets, open documents) with real reads, so a transient Photoshop hiccup mid-snippet produced an authoritative-looking "0 action sets" response with no signal to the caller. A new `degraded` array on the structured response names the signals that fell back, and the human-readable text carries the same in parens.
+  - `photoshop_ping` in `src/core/server.ts` `pingPhotoshop` now collects and surfaces a degraded list (`'pingState'` / `'templates'`)
+  - Output schema gains a `degraded` array (additive — no breaking change for existing callers)
+- **Document creation fails loudly when the colorMode map and schema enum drift apart.** The handler previously fell back to RGB silently when the input-schema enum and the internal mapping disagreed; a future enum extension that forgot the map entry would produce RGB documents for, say, `Lab`. The handler now throws an explicit drift error so the gap surfaces at first call instead of producing wrong output.
+  - `photoshop_create_document` in `src/tools/document-tools.ts`
+- **Windows CLSID detector strips surrounding quotes correctly.** The legacy regex required a closing `"` inside a substring that the greedy `.+\.exe` capture had already truncated; the strip silently no-op'd, leaving a leading `"` in the captured path. `checkPath` covered for it by re-stripping defensively, but the primary parser is now correct. A test pinned the buggy behavior as "known limitation" — that test is now updated to assert correct behavior, and two additional shape variants (quoted-no-args, unquoted-with-args) are pinned alongside.
+  - `extractPathFromCLSID` in `src/platform/windows-detector.ts`
+  - `tests/platform/windows-detector.test.ts`
+
+### Security
+
+- **Prototype-pollution guard on every tool input.** `validateArgs` previously passed every non-schema key through to its output object unchanged. An arguments bag with a `__proto__` (or `constructor` / `prototype`) key would set the output's prototype rather than landing as an own property; downstream code that spread, iterated, or property-checked the args could pick up the polluted prototype as an inherited property. The MCP client is trusted, but the trust boundary should not be the only thing standing between a polluted bag and a handler. These three keys are now dropped unconditionally on both the top-level pass-through and the nested-object validation path.
+  - `src/utils/validate.ts` — new `POLLUTION_KEYS` set, filtered at both pass-through points
+  - Adversarial-input coverage: `tests/unit/validate.test.ts` (top-level and nested-object pollution attempts)
+- **macOS executor app-name deny-list now covers all AppleScript string-literal breakers.** `\r` (classic-Mac line ending) and `\t` (statement separator in some AppleScript contexts) are now rejected alongside the prior `"` / `\` / `\n` set so the interpolation site is closed for every breaker even though the value is server-controlled today.
+  - `setAppName` in `src/platform/macos-executor.ts`
+- **EXIF reader caps per-tag `count` at 64K entries before allocating.** The existing bounds check kept `count * typeSize <= buf.length` (256 KB) implicitly, but a 1-byte type with a 256 K count could still allocate a 256 K-entry array from a hostile or corrupted file. An explicit `MAX_TAG_COUNT` flat cap keeps the worst-case allocation predictable regardless of future buffer-size widening.
+  - `src/utils/exif-reader.ts`
+
+---
+
 ## [0.5.0] — 2026-06-06
 
 MINOR bump for a performance-focused batch driven by the 2026-06-06 full-tool demo. That session ran 108 tool calls in 71.8 minutes wall clock — but only 1.5 minutes of that was actual tool work. The LLM was spending 45× more time thinking than the tools spent running, with context bloat as the dominant cause. This release attacks the four biggest contributors. It also promotes a previously-hidden tool whose absence was costing the LLM 5 wasted escape-hatch attempts per session, and ships a runtime error rewrite that converts a dead-end failure into a recoverable one.
@@ -332,7 +368,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.1
 [0.5.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.0
 [0.4.3]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.4.3
 [0.4.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.4.2
