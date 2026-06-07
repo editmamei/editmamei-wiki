@@ -12,6 +12,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.5.2] — 2026-06-07
+
+PATCH bump for a runtime regression in `photoshop_create_layer_mask`. The 2026-06-07 live A/B session caught it failing with `"command 'Make' is not currently available"` after a canonical subject-isolation flow (`duplicate_layer` → `select_subject` → `get_selection_preview` → `feather_selection` → `create_layer_mask`). Spec-library audit had verified the descriptor in isolation; this surfaced the *interaction* with state polluted by prior tools in the flow.
+
+### Fixed
+
+- **Mask creation now works after smart-selection and selection-preview steps.** A canonical "isolate the subject" flow (smart selection → review the selection → feather it → make a mask) was failing on the final step with a generic Photoshop error. The cause: every selection-info read and preview render created a temporary alpha channel for measurement, removed it on the way out, but never reset the active channel back to the document composite. Subsequent operations that require the composite channel (most notably mask creation) then failed for what looked like an unrelated reason. Composite is now restored automatically by every tool that stashes a temporary channel.
+  - Tool fixed: `photoshop_create_layer_mask`
+  - Root cause was in `getSelectionInfo` (inlined at the end of every selection-tool return — `select_subject`, `select_sky`, `select_rectangle`, `magic_wand`, `color_range`, `feather_selection`, `invert_selection`, `select_all`, `deselect`, `get_selection_info`, `get_selection_preview`) and in `get_selection_preview`'s own preview render. Both call `doc.channels.add()` to stash the selection for measurement
+  - PS makes the new alpha channel the active channel; removing the channel later does not reliably restore composite, leaving the document on an indeterminate channel
+  - The `Mk Chnl At=Msk` AM event (what `create_layer_mask` dispatches) requires composite as the active channel, so it then rejected with `"command 'Make' is not currently available"`
+  - The descriptor itself was verified against ScriptListener ground truth in the 2026-06-04 Group D audit — the audit caught descriptor shape but did not exercise interactions with state-polluting predecessors, which is what this fix closes
+
+---
+
 ## [0.5.1] — 2026-06-07
 
 PATCH bump from the 2026-06-07 deep code audit. The LLM-facing tool surface (names, schemas, descriptions) is unchanged; every change is runtime hardening, observability, or a defensive guard inside `src/`. Eighteen audit findings are addressed in this release — eleven runtime fixes plus seven new test files closing coverage gaps on security-critical helpers (validator, JSX escapes, Pro-tier tool factories, the AM spec registry).
@@ -368,7 +383,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.2...HEAD
+[0.5.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.2
 [0.5.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.1
 [0.5.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.0
 [0.4.3]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.4.3
