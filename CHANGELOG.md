@@ -12,6 +12,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.5.5] — 2026-06-08
+
+PATCH bump for a macOS-specific get_preview failure surfaced in the same 2026-06-08 session that drove v0.5.4. Photoshop's saveAs to `/tmp` paths on macOS sometimes returns success without actually writing the file (sandbox / symlink quirk), producing a confusing `ENOENT: no such file or directory` error on the handler side that looks like an Editmamei bug but is actually a PS-side silent failure.
+
+### Fixed
+
+- **Previews are reliable on macOS again.** Two preview calls in the same Mac session failed with an ENOENT error on the temp file under `/tmp`, while other previews in the same session worked. The script claimed success but no file was written — Photoshop's saveAs to paths under `/tmp` on macOS sometimes silently no-ops (the path is subject to sandbox redirection / symlink resolution). The preview handler now uses a user-owned cache directory (`~/Library/Caches/editmamei/tmp`) instead of the OS temp root on macOS. Windows and Linux are unchanged.
+  - Tool fixed: `photoshop_get_preview`
+  - Mac handler path now resolves through the existing `userOwnedTempRoot()` helper instead of `tmpdir()`
+  - The snippet also gained a defensive `outFile.exists` check immediately after the saveAs call — if Photoshop reports success but the file isn't actually there, the tool now throws an explicit, diagnosable error naming the exact path PS claimed to write to (instead of a cryptic ENOENT surfacing on the Node side)
+
+---
+
 ## [0.5.4] — 2026-06-08
 
 PATCH bump rolling back the v0.5.3 cosmetic optimization in `restoreCompositeChannel` after a macOS PS 27.7 session reproduced the exact bug class v0.5.2 was supposed to close. The optimization saved one undo-history entry per selection-tool call and reintroduced the bug it was protecting against. Trade was wrong.
@@ -422,7 +435,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.4...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.5...HEAD
+[0.5.5]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.5
 [0.5.4]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.4
 [0.5.3]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.3
 [0.5.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.2
