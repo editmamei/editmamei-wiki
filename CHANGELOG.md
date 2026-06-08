@@ -12,6 +12,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.5.6] — 2026-06-08
+
+PATCH bump closing a leak where the orientation skill and the overview tool referenced features the user couldn't actually invoke. CE sessions could read prose telling the LLM about Pro-only tools (Sensei selections, action playback, layer transforms, template authoring, the escape hatch) or dev-tier filters that don't ship in CE OR Pro — making the product feel limited and inviting the LLM to try tools that aren't there. Same change pulls the discovery chain (ping → overview → `tools/list`) into both surfaces so the LLM has a repeatable session-start orientation it can rely on every time.
+
+### Fixed
+
+- **Workflow guidance no longer references features the user can't reach.** The orientation skill and the overview tool are now tier-agnostic — they describe the workflow and the inventory comes from `tools/list`. CE sessions stop reading prose about Pro-only tools they don't have; the product feels complete instead of limited.
+  - Surfaces affected: the Editmamei skill (`skills/editmamei/SKILL.md`, uploaded by users to claude.ai) and the overview tool's static markdown body (returned by `photoshop_overview`).
+  - Skill body: stripped the entire "Tier awareness" section and "(Pro-tier workflow)" qualifier on Templates; reframed the escape-hatch section as "When typed tools aren't enough" without naming a specific tool; rewrote Templates discussion to defer specific tool names to `tools/list`.
+  - Overview markdown: removed `(Pro)` markers from `subject` / `sky` / `get_histogram` / `execute_script` / Templates / Actions; deleted the "Actions" capability section and the "AM event verification status" maintainer note (the latter referenced dev-tier filter names that don't ship in CE or Pro); narrowed the Filters capability list to community-tier filters only; rewrote the escape-hatch section as "When typed tools aren't enough."
+  - Discovery chain made explicit in both surfaces: `photoshop_ping` (liveness) → `photoshop_overview` (workflow) → `tools/list` (inventory). New section in the skill walks the LLM through it; the overview's intro paragraph anchors it. This addresses a separate failure mode where sessions didn't consistently invoke the discovery primitives at start and worked from partial mental models.
+  - Companion fix: `photoshop_get_histogram` is community tier per `src/core/tool-tiers.ts`, but both the skill body and the overview labelled it as Pro. Wording corrected in both places.
+- **The orientation overview no longer leaks dev-tier filter names that aren't in any shipped bundle.** Five filter operations sit at `'dev'` tier (excluded from CE AND Pro shipped bundles per the dev-default-then-promote gate) but the overview's capability map and "AM event verification status" section listed them by name as if they were available. The LLM driving a real session would never see those tools in `tools/list`, so the prose was at best confusing and at worst invited failed tool calls.
+
+---
+
 ## [0.5.5] — 2026-06-08
 
 PATCH bump for a macOS-specific get_preview failure surfaced in the same 2026-06-08 session that drove v0.5.4. Photoshop's saveAs to `/tmp` paths on macOS sometimes returns success without actually writing the file (sandbox / symlink quirk), producing a confusing `ENOENT: no such file or directory` error on the handler side that looks like an Editmamei bug but is actually a PS-side silent failure.
@@ -435,7 +451,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.5...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.6...HEAD
+[0.5.6]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.6
 [0.5.5]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.5
 [0.5.4]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.4
 [0.5.3]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.3
