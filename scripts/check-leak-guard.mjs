@@ -35,7 +35,7 @@ const REPO_ROOT = resolve(__dirname, '..');
 const SELF_PATH = fileURLToPath(import.meta.url);
 
 // Keep in sync with Editmamei/src/core/tool-tiers.ts dev/none entries.
-// Last sync: 2026-06-06 (create_layer_mask promoted dev → community).
+// Last sync: 2026-06-07 (photoshop_stamp_visible added at 'dev' tier).
 const BLOCKED = [
   'photoshop_apply_color_lookup',
   'photoshop_apply_lens_blur',
@@ -47,6 +47,10 @@ const BLOCKED = [
   'photoshop_apply_reduce_noise',
   'photoshop_apply_high_pass',
   'photoshop_apply_equalize',
+  // photoshop_stamp_visible landed 'dev' 2026-06-07 — well-documented
+  // MrgV + Dplc:true AM dispatch but not yet ScriptListener-pinned.
+  // Promote after a successful live invocation is logged.
+  'photoshop_stamp_visible',
 ];
 
 // NOTE on CHANGELOG.md scope (2026-06-05): CHANGELOG.md is intentionally

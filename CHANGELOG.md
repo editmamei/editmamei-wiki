@@ -12,6 +12,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.5.3] — 2026-06-07
+
+PATCH bump bundling three changes. Two close out the v0.5.2 channel-pollution audit: the bug class also leaks on the early-exit throw paths of every smart-selection tool, AND the helper that fixes it adds a redundant undo entry on the common case. One adds a long-missing tool the LLM kept burning escape-hatch attempts trying to write by hand.
+
+### Fixed
+
+- **Smart selection tools no longer leave the document on a non-composite channel when they fail.** v0.5.2 fixed the normal-return path; an audit follow-up found the same bug class on every smart-selection tool's *failure* path. When Select Subject fails because the Sensei model is unavailable, or Select Sky completes but finds no sky, or Magic Wand throws on a degenerate sample point, the snippet would throw without restoring composite — and the next `photoshop_create_layer_mask` call would inherit the broken state. Every early-exit throw path in the four affected tools now restores composite before throwing.
+  - Tools fixed: `photoshop_select_subject`, `photoshop_select_sky`, `photoshop_select_color_range`, `photoshop_magic_wand`
+  - Six early-exit sites patched in total (two each in subject + sky, one each in color range + wand)
+  - The shared `selectionTypeHelpers` JSDoc now documents the contract so future selection tools using the helper block get the rule
+
+### Added
+
+- **Stamp Visible — the Ctrl+Alt+Shift+E shortcut as a first-class tool.** Merges all currently-visible layers into a NEW layer placed above the active layer, leaving the originals untouched. The canonical "final tweak step" at the end of a grade: apply output sharpening, grain, contrast, or any filter to the stamped layer without touching the underlying adjustment stack. The user can A/B by toggling the stamp visible/hidden. The 2026-06-06 full-tool demo session burned multiple escape-hatch attempts trying to write this descriptor by hand; the canonical recipe now ships as a single tool call.
+  - New tool: `photoshop_stamp_visible`
+  - Lands at the `'dev'` tier per the dev-default-then-promote policy. The AM dispatch (`MrgV` event with `Dplc: true`) is the standard PS scripting recipe, but not yet pinned against a fresh ScriptListener capture against PS 27.x. Promote to `'community'` after a successful live invocation is logged.
+  - Distinct from `photoshop_merge_visible_layers` which is the destructive variant — prefer `stamp_visible` when the goal is to build on top of the current composite rather than collapse it
+
+### Changed
+
+- **`restoreCompositeChannel` no longer adds a redundant "Select RGB Channel" undo entry on the common case.** A QA finding on v0.5.2 noted that the channel-restore helper was firing the `slct` AM event unconditionally — adding a cosmetic history entry every time a selection tool finished, even when Photoshop had already fallen back to composite on its own. The helper now checks whether the active channels already match the document's composite (length equality on `doc.activeChannels` vs `doc.componentChannels`) and short-circuits when restoration isn't needed. The AM event still fires when composite is genuinely not active, so the original bug fix remains in place.
+  - Helper changed: `restoreCompositeChannel(doc)` in `src/api/extendscript.ts`
+
+---
+
 ## [0.5.2] — 2026-06-07
 
 PATCH bump for a runtime regression in `photoshop_create_layer_mask`. The 2026-06-07 live A/B session caught it failing with `"command 'Make' is not currently available"` after a canonical subject-isolation flow (`duplicate_layer` → `select_subject` → `get_selection_preview` → `feather_selection` → `create_layer_mask`). Spec-library audit had verified the descriptor in isolation; this surfaced the *interaction* with state polluted by prior tools in the flow.
@@ -383,7 +408,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.2...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.3...HEAD
+[0.5.3]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.3
 [0.5.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.2
 [0.5.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.1
 [0.5.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.0
