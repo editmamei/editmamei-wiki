@@ -12,6 +12,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.7.1] — 2026-06-09
+
+PATCH bump for a pure source refactor: the 6500-line `src/api/extendscript.ts` monolith is now 12 per-category files under `src/api/extendscript/` plus a 70-line assembler. Tool surface (names, schemas, descriptions) is unchanged; runtime behaviour is byte-identical (same `ExtendScriptSnippets` shape, same 81 snippets, same bodies). The `packages/{ce,pro}/dist/api/` layout gains an `extendscript/` subdirectory — the dist-diff that drives this PATCH bump.
+
+---
+
 ## [0.7.0] — 2026-06-09
 
 MINOR bump promoting nine dev-tier tools to the shipped surface after live verification across two recent workloads. Six land in `'community'` (the CE workhorse pipeline gains shadow/highlight recovery, smart sharpening, noise reduction, high-pass clarity, equalize, and stamp-visible) and three land in `'pro'` (the Bundle V content-aware retouch trio). Promotion follows the dev-default-then-promote gate from [`docs/20260603-tool-tier-process.md`](docs/20260603-tool-tier-process.md); verification evidence is tracked in [`docs/20260608-tool-usage-tracker.md`](docs/20260608-tool-usage-tracker.md).
@@ -522,7 +528,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.7.1
 [0.7.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.7.0
 [0.6.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.6.0
 [0.5.8]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.8
