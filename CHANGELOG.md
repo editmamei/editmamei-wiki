@@ -12,6 +12,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.5.7] — 2026-06-08
+
+PATCH bump for the real `photoshop_create_layer_mask` fix on macOS. v0.5.4 rolled back the channel-state optimization on the assumption that channel pollution was the cause; v0.5.6 cleaned up surrounding workflow guidance. A 2026-06-08 Mac session NDJSON proved both were red herrings — the mask call still failed three times in a row, including once with NO active selection (which rules out anything channel-related). Root cause was a real descriptor-shape bug that Windows tolerated and macOS rejected.
+
+### Fixed
+
+- **Mask creation works on macOS.** The mask-creation snippet was sending the AM descriptor's `At` slot as a bare enumerated value (`putEnumerated` directly on the descriptor) when the captured spec for Layer > Layer Mask requires it to be an `ActionReference` containing the enumerated chain. Windows Photoshop accepted the bare-enumerated form leniently, so the bug shipped through every audit pass; macOS Photoshop strictly enforces the spec and rejected with the generic "command Make not currently available" error. The snippet now builds a proper ActionReference for the `At` slot, matching the captured ground truth exactly.
+  - Tool fixed: `photoshop_create_layer_mask`
+  - The 2026-06-08 Mac session reproduced this three times in a row — failing once after a feathered selection / blur chain, again after `select_layer` re-anchored the target, and a *third* time after `deselect` (which proved the bug wasn't selection or channel state)
+  - Companion spec at `src/spec/ps27/masks/create-reveal-all.ts` already declared `At` as `kind: 'reference'`; the snippet just didn't match
+  - Regression guards added at `tests/tools/selection-tools.test.ts`: a `.not.toMatch` against the bare-`putEnumerated` form, plus positive assertions on the new `ActionReference` shape (`atRef.putEnumerated(cTID('Chnl'), cTID('Chnl'), cTID('Msk '))` and `desc.putReference(cTID('At  '), atRef)`)
+
+---
+
 ## [0.5.6] — 2026-06-08
 
 PATCH bump closing a leak where the orientation skill and the overview tool referenced features the user couldn't actually invoke. CE sessions could read prose telling the LLM about Pro-only tools (Sensei selections, action playback, layer transforms, template authoring, the escape hatch) or dev-tier filters that don't ship in CE OR Pro — making the product feel limited and inviting the LLM to try tools that aren't there. Same change pulls the discovery chain (ping → overview → `tools/list`) into both surfaces so the LLM has a repeatable session-start orientation it can rely on every time.
@@ -451,7 +465,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.6...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.5.7...HEAD
+[0.5.7]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.7
 [0.5.6]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.6
 [0.5.5]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.5
 [0.5.4]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.5.4
