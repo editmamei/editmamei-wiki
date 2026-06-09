@@ -12,6 +12,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.7.2] — 2026-06-09
+
+PATCH bump fixing three structured-response bugs that surfaced during the v0.7.1 Mac CE full-surface validation, plus a MINOR-shaped surface change (histogram added to CE) and a cross-cutting fix for Pro-tier tool names leaking into CE descriptions. The first two bugs presented identically — Photoshop completed the work, the session log recorded `success:true`, but Claude Desktop showed a red "Failed to call tool" toast because the structured response contained `{}` where a number was expected. Root cause: ExtendScript host objects (UnitValue, BitsPerChannelType enum) serialize as empty objects through the JSON encoder.
+
+### Fixed
+
+- **Setting a text font no longer surfaces as a UI failure even when it succeeds.** The structured response from this tool was sending an empty object where a font-size number was expected; Claude Desktop validated the response against the declared schema, the empty object failed validation, and the call surfaced as a red "Failed to call tool" toast in the UI — even though Photoshop had applied the font correctly and the session log recorded success. The snippet now coerces the size value to a plain point number before returning, so the response shape matches the schema and the UI no longer reports a phantom failure.
+  - Tool fixed: `photoshop_set_text_font`
+  - Confirmed across Arial / Helvetica / Times New Roman in the 2026-06-09 Mac CE validation session
+  - Same root-cause pattern as the bits-per-channel fix below — ExtendScript `UnitValue` is a host object; the JSON encoder walks own properties via `for...in` + `hasOwnProperty` and gets nothing, so it serializes as `{}`
+  - Snippet now uses `layer.textItem.size.as('pt')` which returns a plain Number (the wrapper preamble has already pinned `TypeUnits.POINTS`)
+- **Opening a document no longer surfaces as a UI failure even when it succeeds.** Same shape of bug as the font fix above, different host object: the bits-per-channel field was a `BitsPerChannelType` enumeration host object (ONE / EIGHT / SIXTEEN / THIRTYTWO), not a plain integer. Empty-object serialization, schema validation failure, red toast on a successful operation. The pipeline now maps the enum to its integer value (1 / 8 / 16 / 32) before returning.
+  - Tool fixed: `photoshop_open_document`
+  - Same fix applied defensively to `photoshop_get_metadata`'s document section — the permissive `object` schema was hiding the corrupted field rather than failing it, so the bug was silent there but the data was still wrong on the wire
+  - New `bitsPerChannelHelper` constant in `src/api/extendscript/_helpers.ts` shared by both call sites
+
+### Added
+
+- **The verification-grade histogram primitive now ships in CE.** It was always classified `'community'` in the tier table but registered in the Pro-only `preview-tools-pro.ts` file, which gets build-stubbed for CE. Net effect: CE users got an invisible-but-classified-community tool. The handler, schema, and registration are now in `preview-tools.ts` where the classification has always pointed. Pro builds are unchanged (Pro factories register a superset of community, so moving a tool from Pro file to CE file changes the bundle composition without changing the Pro surface). The histogram description also drops the "**Pro tier.**" preamble and the "CE callers without Pro:" workaround paragraph, since it's no longer Pro.
+  - Concrete user-visible change: CE users now get the verification-grade histogram primitive that the audit doc has been recommending for clipping detection / exposure verification / neutral-gray checks since Bundle Q
+
+### Changed
+
+- **Tool descriptions read by CE users no longer name Pro-tier tools or include tier markers.** Three concrete leaks fixed this release, plus a new build-fail test guarding against any future drift. The 2026-06-09 Mac CE session caught the pattern: `photoshop_ping`'s description told the LLM that "photoshop_list_actions / play_action are worth exploring" when the user has Action Sets loaded — both Pro tools, invisible in CE, so the LLM dutifully searched the inventory, came up empty, and reported them as broken. Same shape of leak in `photoshop_template_list` ("Create one with `photoshop_template_create_evidence` + `photoshop_template_save`", both Pro) and `photoshop_invert_selection` ("`photoshop_select_subject` (Pro) → invert"). All three rewritten to be tier-agnostic: the LLM now learns about the workflow without being told to call tools it can't reach.
+  - Tools whose descriptions changed: `photoshop_ping`, `photoshop_template_list`, `photoshop_template_apply`, `photoshop_invert_selection`
+  - New invariant: CE-visible tool descriptions must be tier-agnostic. Pro / dev / none-tier tool names belong in the corresponding tier's tool's OWN description, never referenced from elsewhere
+
+---
+
 ## [0.7.1] — 2026-06-09
 
 PATCH bump for a pure source refactor: the 6500-line `src/api/extendscript.ts` monolith is now 12 per-category files under `src/api/extendscript/` plus a 70-line assembler. Tool surface (names, schemas, descriptions) is unchanged; runtime behaviour is byte-identical (same `ExtendScriptSnippets` shape, same 81 snippets, same bodies). The `packages/{ce,pro}/dist/api/` layout gains an `extendscript/` subdirectory — the dist-diff that drives this PATCH bump.
@@ -528,7 +557,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.7.1...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.7.2...HEAD
+[0.7.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.7.2
 [0.7.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.7.1
 [0.7.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.7.0
 [0.6.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.6.0
