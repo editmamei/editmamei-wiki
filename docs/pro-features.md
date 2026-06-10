@@ -26,7 +26,7 @@ The Community edition covers the core editing surface most photographers need da
 - **Selections** — Rectangle, Select All, Deselect, Invert, Feather
 - **Layer masks** — create from selection, apply, delete
 - **Layer styles** — drop shadow, stroke, outer glow, inner shadow
-- **Selections** — Color Range, Magic Wand (alongside Rectangle / Select All / Deselect / Invert / Feather)
+- **Selections** — Magic Wand (alongside Rectangle / Select All / Deselect / Invert / Feather)
 - **Templates** — list and apply user-saved templates from `~/.editmamei/templates/`. Templates are bundles that pair a markdown recipe with before/after previews and the captured tool-call evidence; CE applies them, Pro creates them.
 - **History** — undo, redo, get history states, jump to state
 - **Actions** — list, play recorded Photoshop Actions
@@ -58,7 +58,7 @@ CE users get `photoshop_template_apply` and `photoshop_template_list` (above, un
 - `photoshop_select_subject` — Sensei-backed subject isolation
 - `photoshop_select_sky` — Sensei-backed sky selection
 
-Every selection returns a rich feedback bundle — area coverage, edge complexity, partial-vs-full pixel counts — so the AI can verify a selection actually grabbed what was intended before committing. The non-Sensei selection tools (Color Range, Magic Wand, rectangle, feather) are in Community.
+Every selection returns a rich feedback bundle — area coverage, edge complexity, partial-vs-full pixel counts — so the AI can verify a selection actually grabbed what was intended before committing. The non-Sensei selection tools (Magic Wand, rectangle, feather) are in Community.
 
 ### Per-channel histograms
 

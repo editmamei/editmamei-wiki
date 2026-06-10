@@ -66,7 +66,7 @@ Once the basics work, try one of these:
 
 **A portrait retouching setup:**
 
-> "Select the warm skin-tone range with Color Range (R~200, G~150, B~130, fuzziness 60), feather the selection 2 pixels, then add a Curves adjustment layer clipped to that selection that gently warms the skin tones."
+> "Click the background near the subject with photoshop_magic_wand (tolerance 30, anti_alias true), feather the selection 2 pixels, invert the selection, then add a Curves adjustment layer clipped to that selection that gently warms the skin tones."
 
 *(Sensei-backed `photoshop_select_subject` does the same thing in one call but is a Pro tool — see [pro-features.md](pro-features.md).)*
 

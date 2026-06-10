@@ -78,7 +78,7 @@ Editmamei gives your AI assistant a working photographer's toolkit inside Photos
 
 - **Documents** — open, save, export, close; full format coverage (PSD, JPEG, PNG, TIFF, DNG, HEIC, raw)
 - **Layers** — create, duplicate, delete, rename, reorder, group, merge, flatten; opacity, blend mode, visibility, locking
-- **Smart selections** — Color Range, Magic Wand, plus rectangle/feather; rich selection feedback. Pro adds Sensei-backed Select Subject and Select Sky.
+- **Smart selections** — Magic Wand, plus rectangle/feather; rich selection feedback. Pro adds Sensei-backed Select Subject and Select Sky.
 - **Non-destructive adjustments** — Curves, Levels, Hue/Saturation, Brightness/Contrast as adjustment layers
 - **Filters** — Gaussian Blur, Motion Blur, Sharpen, Add Noise; layer styles (drop shadow, stroke, outer glow)
 - **Templates** — apply saved recipes (markdown + before/after previews + tool-call evidence) to new images; create your own with Pro
@@ -99,7 +99,7 @@ Full feature breakdown at [editmamei.com](https://editmamei.com).
 | Layers (create, duplicate, group, merge, transform, reorder, properties) | ✅ | ✅ |
 | Non-destructive adjustments (Curves, Levels, Hue/Saturation, Brightness/Contrast) | ✅ | ✅ |
 | Filters (Gaussian Blur, Motion Blur, Sharpen, Add Noise) | ✅ | ✅ |
-| Smart selections (Color Range, Magic Wand, rectangle, feather, with rich feedback) | ✅ | ✅ |
+| Smart selections (Magic Wand, rectangle, feather, with rich feedback) | ✅ | ✅ |
 | Masks (create from selection, apply, delete) | ✅ | ✅ |
 | Layer styles + text (drop shadow, stroke, glow; font, color, alignment) | ✅ | ✅ |
 | History + Actions (undo, redo, jump to state, play recorded Photoshop Actions) | ✅ | ✅ |

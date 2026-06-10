@@ -119,7 +119,7 @@ This is a property of the AI client, not of Editmamei or Photoshop. Two things h
 
 ### What's the difference between Community and Pro?
 
-See the full breakdown in [pro-features.md](pro-features.md). Short version: Community covers the full working-photographer editing surface — documents, layers, non-destructive adjustment layers, filters, layer styles, masks, Color Range and Magic Wand selections, applying templates, history, actions, text, image placement. Pro adds three things on top: **authoring** your own templates (create / save / delete; CE already applies them), the **Sensei-backed** Select Subject and Select Sky, and **per-channel histograms**. See the canonical editions table in the [main README](../README.md#editions).
+See the full breakdown in [pro-features.md](pro-features.md). Short version: Community covers the full working-photographer editing surface — documents, layers, non-destructive adjustment layers, filters, layer styles, masks, Magic Wand and rectangle/feather selections, applying templates, history, actions, text, image placement. Pro adds three things on top: **authoring** your own templates (create / save / delete; CE already applies them), the **Sensei-backed** Select Subject and Select Sky, and **per-channel histograms**. See the canonical editions table in the [main README](../README.md#editions).
 
 ### How do I activate a Pro license?
 
