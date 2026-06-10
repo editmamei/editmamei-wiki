@@ -12,6 +12,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.8.2] — 2026-06-10
+
+PATCH bump: clearing the remaining post-release debt from the 2026-06-10 v0.7.2 pre-release audit. Five items addressed (M1, M2, M3, LOW cluster, D2). No LLM-facing surface change. Also catches a `src/version.ts` drift that slipped into v0.8.1 (the version-coupling test passed in v0.8.1 by accident; this release re-pins it).
+
+### Security
+
+- **Cleaner argument handling in the macOS Photoshop-installation detector.** The detector previously assembled shell-command strings with interpolated filesystem-derived paths (mdfind output, app names, plist paths). Switched all four `child_process` calls to `execFile` with explicit argument arrays so the shell is never involved. Local-actor-only threat model (someone able to plant a Spotlight-indexed bundle already has code execution as the user), but it matches the args-array discipline the script executors already use.
+  - `src/platform/macos-detector.ts`: `extractVersionFromApp`, `checkIfRunning`, `getAppBundleId`, and `detectUsingSpotlight` all rewritten to use `execFileAsync`. The `exec` import is gone; only `execFile` remains.
+  - Audit M2 fix.
+
+### Fixed
+
+- **Subject-selection error message no longer recommends a tool the registry can't reach.** When the Sensei-backed subject and sky selectors fail or find nothing, the fallback recommendation in the error string now points at a community-tier alternative instead of a dev-tier tool that registers in no shipped edition.
+  - `src/api/extendscript/selections.ts`: two error-string paths updated. `photoshop_select_subject`'s "no subject found" branch and `photoshop_select_sky`'s "no sky region" branch both used to recommend `photoshop_select_color_range`, which has been `'dev'` tier since 2026-06-03 (DOM method doesn't exist; awaits AM-descriptor rewrite). Both now recommend `photoshop_magic_wand`.
+  - New regression guard at `tests/integration/readme-leak-guard.test.ts` ("ExtendScript snippet error-string leak guard") scans every `src/api/extendscript/*.ts` source for `'dev'`/`'none'`-tier `photoshop_*` names and fails the build if any reappear in runtime error strings or anywhere else in the snippet sources.
+  - Audit M1 fix.
+
+---
+
 ## [0.8.1] — 2026-06-10
 
 PATCH bump: internal Pro-tool isolation refactor. No LLM-facing surface change — same tool names, same descriptions, same Pro/CE split. The shipped CE tarball no longer carries the Pro implementations for the action / layer-transform / retouch surfaces, restoring the build-time exclusion the `tool-tiers.ts` header had been documenting incorrectly. Addresses 2026-06-10 v0.7.2 pre-release audit findings H2/Q1 + M4.
@@ -577,7 +596,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.8.2...HEAD
+[0.8.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.8.2
 [0.8.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.8.1
 [0.8.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.8.0
 [0.7.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.7.2
