@@ -8,7 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-(Empty — next commit appends here.)
+(No user-facing changes pending — next commit appends here.)
+
+---
+
+## [0.8.3] — 2026-06-10
+
+PATCH bump: session-log schema v2 enrichment (Phase 2a). Adds structured meta lines, per-call sequence numbers, retry detection, result-size accounting, context-scalar hoisting, and error classification to the NDJSON telemetry. No LLM-facing tool surface change.
 
 ---
 
@@ -596,7 +602,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.8.2...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.8.3...HEAD
+[0.8.3]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.8.3
 [0.8.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.8.2
 [0.8.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.8.1
 [0.8.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.8.0
