@@ -49,6 +49,11 @@ const BLOCKED = [
   'photoshop_select_color_range',
   'photoshop_create_clipping_mask',
   'photoshop_release_clipping_mask',
+  // Added 2026-06-10 alongside Editmamei v0.8.0 — closes 2026-06-10 audit H1.
+  // Bundle W (2026-06-09 commit 6a6a143) added the brush-stroke tool at
+  // `'dev'` tier but the Bundle W commit missed the dual-list update this
+  // BLOCKED array exists to enforce.
+  'photoshop_apply_brush_stroke',
 ];
 
 // NOTE on CHANGELOG.md scope (2026-06-05): CHANGELOG.md is intentionally

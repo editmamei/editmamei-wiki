@@ -12,6 +12,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.8.0] — 2026-06-10
+
+MINOR bump for a preview-tool surface contraction: `photoshop_get_preview` no longer accepts a `format` argument. The previously-supported PNG variant always failed for any non-tiny document — PNG payloads at the default 1024px max-dim run 1.5-3 MB on a typical photo, which exceeds the MCP transport's per-response cap of ~1 MB. JPEG at the default quality 6 is visibly clean for tone / color / spatial verification and stays under the cap. Removing the option drops a footgun that confused the LLM into retrying with smaller `max_dimension` values whenever PNG failed.
+
+### Changed
+
+- **Preview rendering always uses JPEG; the `format` argument is gone.** Was an enum `'jpeg' | 'png'` defaulting to `'jpeg'`. The PNG variant was a footgun — preview of any non-tiny doc rendered into a payload PNG large enough to blow past the MCP per-response cap, so the call always failed with a transport-layer error that the LLM read as a tool bug. JPEG at the new default quality 6 is preserved verbatim and is the only output now.
+  - Tool affected: `photoshop_get_preview` — `inputSchema.format` removed
+  - Output is now unconditionally `image/jpeg` (the response also always reports `format: "jpeg"` and `mime_type: "image/jpeg"` in `structuredContent` so downstream consumers don't have to branch)
+  - Callers passing `format: 'jpeg'` are unaffected — the field is silently ignored by the schema validator. Callers passing `format: 'png'` now get JPEG instead of the previous broken-with-error behaviour. No-op for the documented use case
+  - The `quality` parameter's description was tightened — it no longer says "Ignored for PNG" since PNG is gone
+
+---
+
 ## [0.7.2] — 2026-06-09
 
 PATCH bump fixing three structured-response bugs that surfaced during the v0.7.1 Mac CE full-surface validation, plus a MINOR-shaped surface change (histogram added to CE) and a cross-cutting fix for Pro-tier tool names leaking into CE descriptions. The first two bugs presented identically — Photoshop completed the work, the session log recorded `success:true`, but Claude Desktop showed a red "Failed to call tool" toast because the structured response contained `{}` where a number was expected. Root cause: ExtendScript host objects (UnitValue, BitsPerChannelType enum) serialize as empty objects through the JSON encoder.
@@ -557,7 +571,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.7.2...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.8.0
 [0.7.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.7.2
 [0.7.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.7.1
 [0.7.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.7.0
