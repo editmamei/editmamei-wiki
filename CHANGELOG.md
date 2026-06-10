@@ -12,6 +12,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.8.1] — 2026-06-10
+
+PATCH bump: internal Pro-tool isolation refactor. No LLM-facing surface change — same tool names, same descriptions, same Pro/CE split. The shipped CE tarball no longer carries the Pro implementations for the action / layer-transform / retouch surfaces, restoring the build-time exclusion the `tool-tiers.ts` header had been documenting incorrectly. Addresses 2026-06-10 v0.7.2 pre-release audit findings H2/Q1 + M4.
+
+---
+
 ## [0.8.0] — 2026-06-10
 
 MINOR bump for a preview-tool surface contraction: `photoshop_get_preview` no longer accepts a `format` argument. The previously-supported PNG variant always failed for any non-tiny document — PNG payloads at the default 1024px max-dim run 1.5-3 MB on a typical photo, which exceeds the MCP transport's per-response cap of ~1 MB. JPEG at the default quality 6 is visibly clean for tone / color / spatial verification and stays under the cap. Removing the option drops a footgun that confused the LLM into retrying with smaller `max_dimension` values whenever PNG failed.
@@ -571,7 +577,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.8.1
 [0.8.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.8.0
 [0.7.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.7.2
 [0.7.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.7.1
