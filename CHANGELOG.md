@@ -12,6 +12,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.13.0] — 2026-06-14
+
+### Added
+
+- **Save and load selections to named alpha channels.** Two new tools let Claude checkpoint any selection — even an expensive Sensei/AI-generated one — and restore it by name later, including combination modes (add, subtract, intersect).
+  - `photoshop_save_selection_to_channel` — stores the active selection into a named alpha channel (creates or overwrites); returns selection stats and whether the channel already existed.
+  - `photoshop_load_selection_from_channel` — loads a saved channel back as an active selection with a configurable combine operation (replace / add / subtract / intersect), enabling multi-channel mask composition.
+
+---
+
 ## [0.12.2] — 2026-06-14
 
 ### Changed
@@ -810,7 +820,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.12.2...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.13.0
 [0.12.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.12.2
 [0.12.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.12.1
 [0.12.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.12.0
