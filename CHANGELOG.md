@@ -12,6 +12,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.16.3] — 2026-06-15
+
+### Fixed
+
+- **End-of-session telemetry now actually reaches the server when the app closes.** When a client (notably Claude Desktop on macOS) ends a session by closing the connection rather than sending a termination signal, the final batch and the per-session summary were being dropped — the process exited before the in-flight upload finished. Sessions now flush completely on close.
+  - Root cause: the shutdown flush is triggered from two paths (transport close and the SIGINT/SIGTERM handler). A plain idempotency guard made the second path resolve instantly, so `process.exit(0)` ran while the first path's POST was still in flight. `TelemetryClient.shutdown()` now memoizes and returns the same in-flight promise, so every caller awaits the real flush; the in-flight request (with its 4 s timeout) keeps the event loop alive until the upload lands. Verified by a gated-transport regression test.
+  - Symptom this fixes: `session_daily` rows never appearing (and the tail of `usage_daily`) for macOS installs, even though mid-session periodic batches arrived.
+
+---
+
 ## [0.16.2] — 2026-06-15
 
 ### Changed
@@ -897,7 +907,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.16.2...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.16.3...HEAD
+[0.16.3]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.16.3
 [0.16.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.16.2
 [0.16.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.16.1
 [0.16.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.16.0
