@@ -12,6 +12,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.14.0] — 2026-06-15
+
+### Added
+
+- **Four new editing tools graduate to the shipped surface.** Color-range selection, photographic lens blur, clipping masks, and Smart Object conversion are now available in both Community and Pro after live verification against Photoshop 2026.
+  - `photoshop_select_color_range` — selects all pixels matching a target RGB color within a fuzziness threshold (Select > Color Range). The prior failure ("`selectColorRange` is not a function") was fixed by an ActionManager rewrite (`ClrR` with Lab-converted color objects); verified live in session `2026-06-15T00-57-50Z-b245` (Windows, PS 27.2.0).
+  - `photoshop_apply_lens_blur` — realistic depth-of-field with iris-shape, specular-bokeh, and noise controls; runs on a duplicate by default. The v0.7.0 hang that held it back did not reproduce on a clean run.
+  - `photoshop_create_clipping_mask` — clips the active layer to the layer below as a non-destructive alpha source (Layer > Create Clipping Mask).
+  - `photoshop_convert_to_smart_object` — wraps the active layer so subsequent filters become editable Smart Filters; inverse of rasterize.
+
+---
+
 ## [0.13.1] — 2026-06-14
 
 ### Fixed
@@ -832,7 +844,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.13.1...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.14.0
 [0.13.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.13.1
 [0.13.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.13.0
 [0.12.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.12.2
