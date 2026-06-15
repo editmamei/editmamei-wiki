@@ -98,7 +98,7 @@ Through `photoshop_get_preview`, which returns a downscaled JPEG of the current 
 
 ### Does Editmamei collect any data about my edits?
 
-Nothing about the content of your edits — no images, document data, or file paths ever leave your machine. Editmamei does send anonymous, content-free usage data (which tools ran, whether they succeeded, how long they took), which you can switch off; see [privacy.md](privacy.md) for every field. Separately, a richer local session log is written to `~/.editmamei/sessions/<session-id>.ndjson` (used for debugging and by the Templates system) that stays on your disk and is **not** transmitted. (What your AI client does with content you share in chat is a separate question — see the [privacy policy](https://editmamei.com/privacy).)
+Nothing about the content of your edits goes to us — no images, document data, or file paths. Editmamei does send anonymous, content-free usage data (which tools ran, whether they succeeded, how long they took), which you can switch off; see [privacy.md](privacy.md) for every field. Separately, a richer local session log is written to `~/.editmamei/sessions/<session-id>.ndjson` (used for debugging and by the Templates system) that stays on your disk and is **not** transmitted. (When your AI assistant needs to see an edit, a downscaled preview goes to that assistant — see "Does it need an internet connection?" above; and what your AI client does with content you share in chat is governed by its own [privacy policy](https://editmamei.com/privacy).)
 
 ### Can I run Editmamei against multiple Photoshop versions installed side by side?
 

@@ -6,13 +6,14 @@ leaves. It's about the npm package you install — the `editmamei` MCP server �
 [editmamei.com](https://editmamei.com) website, which has its own
 [privacy policy](https://editmamei.com/privacy).
 
-The short version: your photos never leave your machine. The only thing Editmamei sends is
-anonymous, content-free usage data; it's documented field-for-field below, and you can switch
-it off with one command.
+The short version: your photos aren't uploaded to us. The only thing Editmamei sends to its own
+servers is anonymous, content-free usage data; it's documented field-for-field below, and you can
+switch it off with one command. (When your AI assistant needs to see an edit, a downscaled preview
+goes to that assistant — covered under "Your AI assistant is a cloud service" below.)
 
 ---
 
-## What never leaves your machine
+## What Editmamei never sends to us
 
 There is one line Editmamei does not cross, on any setting or edition:
 

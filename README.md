@@ -57,11 +57,11 @@ Most "AI photo" tools are *generative*. They invent new pixels: skies, objects, 
 
 ### Your files, your machine
 
-Editmamei runs on your own computer, and the editing happens inside your own Photoshop. Your photo files are never uploaded to Editmamei's servers — no image content, no document data, no file paths, ever.
+Editmamei runs on your own computer, and the editing happens inside your own Photoshop. There's no Editmamei cloud your photo library gets uploaded to — no image content, no document data, and no file paths are sent to Editmamei's servers.
 
 Editmamei does report anonymous, content-free usage telemetry (which tools you run, whether they succeed, how long they take, and your version/OS/Photoshop version) so a small team can see what's breaking and what's used. It carries no images, no paths, and no personal data. It's on by default and easy to turn off: `editmamei config set telemetry.usage false` (or edit `~/.editmamei/settings.json`). Optional diagnostic detail for bug-hunting is off until you opt in with `editmamei config set telemetry.diagnostics true`. Exactly what's collected, and every field that's sent, is documented in [docs/privacy.md](docs/privacy.md).
 
-Worth being clear about: your AI assistant is a cloud service. When you ask it to analyze an image (for example, the visual-verification preview), a downscaled JPEG is sent to *that AI provider*, exactly as if you'd dropped the file into a chat with it. That's a property of using a cloud AI, and a function of which assistant you choose. Not a hop Editmamei adds.
+When your AI assistant needs to see the result — to verify an edit, say — Editmamei sends it a downscaled preview: to *that AI provider*, the cloud assistant you chose, the same as dropping a photo into a chat with it. That's how the AI judges its own work; it's a property of using a cloud AI, not a hop Editmamei adds.
 
 ---
 
@@ -127,7 +127,7 @@ Editmamei is closed-source, so what we can verify, we do:
 - **SBOM** — a full software bill of materials lists every dependency in each release.
 - **Abandonment → MIT** — if Editmamei goes unmaintained for 24 months, the license converts to MIT automatically. You're never stranded on a tool you can't keep alive.
 
-Everything Editmamei sends is content-free: anonymous usage data you can audit and switch off. No document, image, file path, or template data ever leaves your machine. Every field that's collected is documented in [docs/privacy.md](docs/privacy.md); the website [privacy policy](https://editmamei.com/privacy) covers it too. Security disclosures at [editmamei.com/security](https://editmamei.com/security).
+The only thing Editmamei sends to us is content-free: anonymous usage you can audit and switch off, never your documents, images, or file paths. Every field that's collected is documented in [docs/privacy.md](docs/privacy.md); the website [privacy policy](https://editmamei.com/privacy) covers it too. Security disclosures at [editmamei.com/security](https://editmamei.com/security).
 
 ---
 
