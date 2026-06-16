@@ -12,6 +12,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.16.4] — 2026-06-16
+
+### Fixed
+
+- **End-of-session telemetry now survives the app being closed or killed.** The v0.16.3 fix wasn't enough — live data confirmed the per-session summary still never arrived from macOS, because an in-process network upload simply can't finish in the moment the host tears the process down. Telemetry no longer relies on delivering at exit.
+  - New durable outbox: anything not already delivered by the in-session periodic flush is written to `~/.editmamei/telemetry-outbox.ndjson` with a **synchronous** write (which completes even as the process dies), and the **next** server startup uploads it. The running session totals are also persisted incrementally, so the session summary is reconstructed on next startup even if the process is hard-killed (`SIGKILL`) before any shutdown handler runs.
+  - Trade-off: the final batch + summary now arrive at the *start of the next session* rather than the end of the current one — for usage analytics that latency is irrelevant; reliable delivery is the point. A clean shutdown clears the session marker so a recovered summary and a clean one can never both be sent. Backlog respects current consent (dropped unsent if usage telemetry was turned off) and is bounded on disk. Still content-free.
+
+---
+
 ## [0.16.3] — 2026-06-15
 
 ### Fixed
@@ -907,7 +917,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.16.3...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.16.4...HEAD
+[0.16.4]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.16.4
 [0.16.3]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.16.3
 [0.16.2]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.16.2
 [0.16.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.16.1
