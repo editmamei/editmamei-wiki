@@ -12,6 +12,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.17.1] — 2026-06-18
+
+(No user-facing changes pending — next commit appends here.)
+
+---
+
 ## [0.17.0] — 2026-06-16
 
 ### Changed
@@ -930,7 +936,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.17.0...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-ce/compare/v0.17.1...HEAD
+[0.17.1]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.17.1
 [0.17.0]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.17.0
 [0.16.4]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.16.4
 [0.16.3]: https://github.com/editmamei/editmamei-ce/releases/tag/v0.16.3
