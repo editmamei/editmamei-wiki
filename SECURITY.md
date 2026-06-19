@@ -43,6 +43,6 @@ Out of scope (for this package):
 - **Fix timeline** depends on severity; we'll communicate the plan and stick to it.
 - **Credit** in the published advisory if you want it (and don't if you don't).
 
-We don't currently run a paid bug bounty, but we're happy to send Editmamei swag (when it exists) and call out your work in the changelog + release notes.
+We don't currently run a paid bug bounty, but we're happy to call out your work in the changelog + release notes.
 
 Thank you for helping us keep Editmamei safe to use.
