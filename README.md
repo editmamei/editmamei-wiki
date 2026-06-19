@@ -28,11 +28,13 @@ npm install -g editmamei
 editmamei install
 ```
 
-`editmamei install` detects which MCP clients you have (Claude Desktop, Cursor, Claude Code) and writes the appropriate config for each — in one pass. Each client gets its own per-client result line so you can see what was touched. Then restart your AI client(s) and ask one of them to ping Photoshop:
+`editmamei install` detects which MCP clients you have (Claude Desktop, Cursor, Claude Code) and writes the appropriate config for each, in one pass. Each client gets its own per-client result line so you can see what was touched. Then restart your AI client(s) and ask one of them to ping Photoshop:
 
 > "Is Photoshop connected?"
 
 You'll see your Photoshop version returned. Full setup walkthrough in [docs/getting-started.md](docs/getting-started.md). To check your install state any time, run `editmamei status`.
+
+**One-click for Claude Desktop:** prefer not to use a terminal? Download the latest `.mcpb` from [the releases page](https://github.com/editmamei/editmamei-wiki/releases/latest) and add it in Claude Desktop under Settings → Extensions. Claude Desktop ships its own Node runtime, so there's nothing else to install.
 
 ---
 
@@ -57,18 +59,18 @@ Most "AI photo" tools are *generative*. They invent new pixels: skies, objects, 
 
 ### Your files, your machine
 
-Editmamei runs on your own computer, and the editing happens inside your own Photoshop. There's no Editmamei cloud your photo library gets uploaded to — no image content, no document data, and no file paths are sent to Editmamei's servers.
+Editmamei runs on your own computer, and the editing happens inside your own Photoshop. There's no Editmamei cloud your photo library gets uploaded to. No image content, no document data, and no file paths are sent to Editmamei's servers.
 
 Editmamei does report anonymous, content-free usage telemetry (which tools you run, whether they succeed, how long they take, and your version/OS/Photoshop version) so a small team can see what's breaking and what's used. It carries no images, no paths, and no personal data. It's on by default and easy to turn off: `editmamei config set telemetry.usage false` (or edit `~/.editmamei/settings.json`). Optional diagnostic detail for bug-hunting is off until you opt in with `editmamei config set telemetry.diagnostics true`. Exactly what's collected, and every field that's sent, is documented in [docs/privacy.md](docs/privacy.md).
 
-When your AI assistant needs to see the result — to verify an edit, say — Editmamei sends it a downscaled preview: to *that AI provider*, the cloud assistant you chose, the same as dropping a photo into a chat with it. That's how the AI judges its own work; it's a property of using a cloud AI, not a hop Editmamei adds.
+When your AI assistant needs to see the result (to verify an edit, say), Editmamei sends it a downscaled preview: to *that AI provider*, the cloud assistant you chose, the same as dropping a photo into a chat with it. That's how the AI judges its own work; it's a property of using a cloud AI, not a hop Editmamei adds.
 
 ---
 
 ## Requirements
 
 - **Node.js** 20 or later
-- **Adobe Photoshop 2026** (internal version 27.x) &mdash; earlier versions unverified ([why](docs/faq.md#which-photoshop-versions-are-supported))
+- **Adobe Photoshop 2026** (internal version 27.x). Earlier versions unverified ([why](docs/faq.md#which-photoshop-versions-are-supported))
 - **Operating system:** Windows 10/11 or macOS 12+
 - An **AI assistant** that speaks MCP, such as Claude Desktop, Cursor, Claude Code, or any other MCP-compatible client
 
@@ -78,14 +80,14 @@ When your AI assistant needs to see the result — to verify an edit, say — Ed
 
 Editmamei gives your AI assistant a working photographer's toolkit inside Photoshop. Your AI calls these as building blocks in service of whatever you actually want, so Photoshop responds to *"make the sky more dramatic but keep the foreground natural"* instead of *Layer → New Adjustment Layer → Curves → drag the curve up at the highlight end.*
 
-- **Documents** — open PSD, JPEG, PNG, TIFF, DNG, HEIC, and the standard raw formats; save layered PSDs; export JPEG and PNG
-- **Layers & transforms** — create, duplicate, delete, rename, reorder, group, merge, flatten; opacity, blend mode, visibility, locking; move, scale, rotate, and fit-to-document (straighten a tilted shot in one step)
-- **Smart selections** — Magic Wand, plus rectangle/feather; rich selection feedback. Pro adds Sensei-backed Select Subject and Select Sky.
-- **Non-destructive adjustments** — Curves, Levels, Hue/Saturation, Brightness/Contrast as adjustment layers
-- **Filters & retouch** — Gaussian Blur, Motion Blur, Sharpen, Smart Sharpen, Reduce Noise, High Pass, Add Noise; layer styles (drop shadow, stroke, outer glow); content-aware retouch (Content-Aware Fill, Patch, Content-Aware Move)
-- **Visual verification** — downscaled preview JPEGs returned inline, plus 256-bin per-channel histograms with mean/stdev/median
-- **History** — undo, redo, inspect history states. Pro adds Photoshop Actions playback and ExtendScript scripting.
-- **Templates (Pro)** — capture a finished edit as a reproducible recipe and apply it to new photos; the whole template system (create, save, apply, verify, recall) is Pro
+- **Documents**: open PSD, JPEG, PNG, TIFF, DNG, HEIC, and the standard raw formats; save layered PSDs; export JPEG and PNG
+- **Layers & transforms**: create, duplicate, delete, rename, reorder, group, merge, flatten; opacity, blend mode, visibility, locking; move, scale, rotate, and fit-to-document (straighten a tilted shot in one step)
+- **Smart selections**: Magic Wand, plus rectangle/feather; rich selection feedback. Pro adds Sensei-backed Select Subject and Select Sky.
+- **Non-destructive adjustments**: Curves, Levels, Hue/Saturation, Brightness/Contrast as adjustment layers
+- **Filters & retouch**: Gaussian Blur, Motion Blur, Sharpen, Smart Sharpen, Reduce Noise, High Pass, Add Noise; layer styles (drop shadow, stroke, outer glow); content-aware retouch (Content-Aware Fill, Patch, Content-Aware Move)
+- **Visual verification**: downscaled preview JPEGs returned inline, plus 256-bin per-channel histograms with mean/stdev/median
+- **History**: undo, redo, inspect history states. Pro adds Photoshop Actions playback and ExtendScript scripting.
+- **Templates (Pro)**: capture a finished edit as a reproducible recipe and apply it to new photos; the whole template system (create, save, apply, verify, recall) is Pro
 
 Real tools. Real layers. Your pixels.
 
@@ -112,42 +114,30 @@ Full feature breakdown at [editmamei.com](https://editmamei.com).
 | Sensei-backed selections (Select Subject, Select Sky) | | ✅ |
 | Photoshop Actions + scripting (play recorded Actions, ExtendScript escape hatch) | | ✅ |
 
-Community covers the everyday working-photographer editing surface — including straightening, layer transforms, and content-aware retouch. Pro adds the production toolkit: the whole reproducible-template system, the Sensei selection models for Subject and Sky, and Photoshop Actions + scripting.
+Community covers the everyday working-photographer editing surface, including straightening, layer transforms, and content-aware retouch. Pro adds the production toolkit: the whole reproducible-template system, the Sensei selection models for Subject and Sky, and Photoshop Actions + scripting.
 
 What's *coming* in Pro after v1.0 (Smart Objects, Smart Filters, channels and vector masks, the rest of the adjustment-layer catalog, refined selection edges, advanced transforms) lives in [docs/roadmap.md](docs/roadmap.md), not on this table. The Pro tool list as it ships today is in [docs/pro-features.md](docs/pro-features.md). Detailed comparison and pricing at [editmamei.com/pricing](https://editmamei.com/pricing).
 
 ---
 
-## Verifiable, not just promised
-
-Editmamei is closed-source, so what we can verify, we do:
-
-- **npm provenance** — every published build is cryptographically linked to the source commit and CI run that produced it.
-- **SBOM** — a full software bill of materials lists every dependency in each release.
-- **Abandonment → MIT** — if Editmamei goes unmaintained for 24 months, the license converts to MIT automatically. You're never stranded on a tool you can't keep alive.
-
-The only thing Editmamei sends to us is content-free: anonymous usage you can audit and switch off, never your documents, images, or file paths. Every field that's collected is documented in [docs/privacy.md](docs/privacy.md); the website [privacy policy](https://editmamei.com/privacy) covers it too. Security disclosures at [editmamei.com/security](https://editmamei.com/security).
-
----
-
 ## Issues & support
 
-**Bug reports and feature requests** belong in [this repo's issue tracker](https://github.com/editmamei/editmamei-wiki/issues). Before opening one, please read the templates and [CONTRIBUTING.md](CONTRIBUTING.md) — they tell you what to include for a fast triage and which kinds of changes are open to PRs.
+**Bug reports and feature requests** belong in [this repo's issue tracker](https://github.com/editmamei/editmamei-wiki/issues). Before opening one, please read the templates and [CONTRIBUTING.md](CONTRIBUTING.md), which tell you what to include for a fast triage and which kinds of changes are open to PRs.
 
 **Important:** issues are public. **Do not paste your license key, full file paths from sensitive projects, or screenshots of unfinished client work.** The bug report template tells you what's safe to share.
 
-For account, billing, or license issues, email [support@editmamei.com](mailto:support@editmamei.com) (Pro subscribers) — those don't belong in a public issue.
+For account, billing, or license issues, email [support@editmamei.com](mailto:support@editmamei.com) (Pro subscribers), since those don't belong in a public issue.
 
-For **security disclosures**, see [SECURITY.md](SECURITY.md) — please use GitHub Private Security Advisories or `security@editmamei.com` rather than the public issue tracker.
+For **security disclosures**, see [SECURITY.md](SECURITY.md). Please use GitHub Private Security Advisories or `security@editmamei.com` rather than the public issue tracker.
 
 ---
 
 ## Documentation
 
-- [Installation](docs/installation.md) — setup for Windows and macOS, all supported MCP clients
-- [Getting started](docs/getting-started.md) — first session, ping test, first real edit
-- [Pro features](docs/pro-features.md) — what's in Pro that's not in CE, with pricing link
-- [FAQ](docs/faq.md) — common questions
+- [Installation](docs/installation.md): setup for Windows and macOS, all supported MCP clients
+- [Getting started](docs/getting-started.md): first session, ping test, first real edit
+- [Pro features](docs/pro-features.md): what's in Pro that's not in CE, with pricing link
+- [FAQ](docs/faq.md): common questions
 
 Full reference docs live at [editmamei.com/docs](https://editmamei.com/docs).
 
