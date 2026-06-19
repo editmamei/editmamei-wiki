@@ -2,13 +2,13 @@ blank_issues_enabled: false
 contact_links:
   - name: Account, billing, or license questions
     url: mailto:support@editmamei.com
-    about: Anything involving your license key, subscription, or invoice — please email instead of opening a public issue.
+    about: Anything involving your license key, subscription, or invoice. Please email instead of opening a public issue.
   - name: Security disclosure
     url: https://editmamei.com/security
     about: Report a security vulnerability privately, per the disclosure process. Do not open a public issue.
   - name: Documentation
-    url: https://editmamei.com/docs
-    about: Reference documentation, recipes, and workflow guides.
+    url: https://github.com/editmamei/editmamei-wiki#readme
+    about: Install guides, getting started, the FAQ, and Pro features.
   - name: Pricing
     url: https://editmamei.com/pricing
     about: Current Community vs Pro feature breakdown and pricing.

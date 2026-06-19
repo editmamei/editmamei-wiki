@@ -1,20 +1,20 @@
 # Getting started
 
-This guide walks you through your first Editmamei session — from confirming Photoshop is connected to making your first real edit. It assumes you've already done the [installation](installation.md).
+This guide walks you through your first Editmamei session, from confirming Photoshop is connected to making your first real edit. It assumes you've already done the [installation](installation.md).
 
-The pattern throughout is the same: **you describe what you want in your own words; the AI plans it; your Photoshop carries it out.** You're not learning a new app — you're learning to ask for what you already know how to do.
+The pattern throughout is the same: **you describe what you want in your own words; the AI plans it; your Photoshop carries it out.** You're not learning a new app; you're learning to ask for what you already know how to do.
 
 ---
 
 ## Step 1: ping Photoshop
 
-With Photoshop open and the MCP client you want to use restarted (any of Claude Desktop, Cursor, or Claude Code — `editmamei install` writes to all three in one pass), start a new conversation and ask:
+With Photoshop open and the MCP client you want to use restarted (any of Claude Desktop, Cursor, or Claude Code; `editmamei install` writes to all three in one pass), start a new conversation and ask:
 
 > "Is Photoshop connected? What version is running?"
 
-The AI should call `photoshop_ping` and `photoshop_get_version`, and you'll see something like:
+The AI calls `photoshop_ping`, which reports whether Photoshop is connected and what version is running. You'll see something like:
 
-> Yes — Photoshop is connected. You're running Photoshop 2026 (version 27.7.0) on Windows.
+> Yes, Photoshop is connected. You're running Photoshop 2026 (version 27.7.0) on Windows.
 
 If you instead see "tool not found" or a connection error, jump to [Troubleshooting](#troubleshooting) at the bottom of this page.
 
@@ -36,7 +36,7 @@ Use any path that points to an image file you have. JPEG, PNG, TIFF, PSD, DNG, a
 
 The AI calls `photoshop_add_adjustment_layer` with `type: "curves"` and appropriate curve points. You should see the new adjustment layer appear in the Photoshop Layers panel, and the document should visibly brighten in the shadows.
 
-Editmamei always prefers non-destructive operations — adjustment layers, masks, and Smart Objects — over destructive bakes, so you can iterate without losing data.
+Editmamei always prefers non-destructive operations (adjustment layers, masks, and Smart Objects) over destructive bakes, so you can iterate without losing data.
 
 ---
 
@@ -68,13 +68,13 @@ Once the basics work, try one of these:
 
 > "Click the background near the subject with photoshop_magic_wand (tolerance 30, anti_alias true), feather the selection 2 pixels, invert the selection, then add a Curves adjustment layer clipped to that selection that gently warms the skin tones."
 
-*(Sensei-backed `photoshop_select_subject` does the same thing in one call but is a Pro tool — see [pro-features.md](pro-features.md).)*
+*(Sensei-backed `photoshop_select_subject` does the same thing in one call but is a Pro tool; see [pro-features.md](pro-features.md).)*
 
 **Reproduce an aesthetic later (Pro):**
 
 > "Save this current edit as a template called 'warm coastal'. Then later, apply 'warm coastal' to every image in `C:\Photos\new-shoot\`."
 
-Full workflow examples and editing patterns at [editmamei.com/docs](https://editmamei.com/docs).
+More workflow examples are on the [product page](https://editmamei.com/product).
 
 ---
 
@@ -82,12 +82,12 @@ Full workflow examples and editing patterns at [editmamei.com/docs](https://edit
 
 AI assistants have a working memory for the conversation. Short sessions stay snappy. Once a conversation has run through a lot of edits, previews, and back-and-forth, that memory fills up and the AI takes longer between each step. You'll notice it as gaps of thirty seconds or more between asking for an edit and seeing the next step happen.
 
-This isn't an Editmamei limit and it isn't a Photoshop limit — it's a property of the AI client itself.
+This isn't an Editmamei limit and it isn't a Photoshop limit; it's a property of the AI client itself.
 
 Two things help, in order:
 
 1. **Start a fresh conversation when you switch projects.** Closing a session and starting a new one resets the working memory. If you've been on one image for an hour and want to move to the next, a new chat is faster than continuing the old one.
-2. **Use Claude Code for sustained work.** Claude Code has a much larger working memory, which means it stays fast across hundreds of edits in one session. Setup is a one-time terminal install; once it's running, it works the same way Desktop does — you type, the AI edits, Photoshop carries it out.
+2. **Use Claude Code for sustained work.** Claude Code has a much larger working memory, which means it stays fast across hundreds of edits in one session. Setup is a one-time terminal install; once it's running, it works the same way Desktop does: you type, the AI edits, Photoshop carries it out.
 
 If you frequently work in long batches (real-estate sets, wedding selects, template authoring), Code is the recommended client. The [installation guide](installation.md#claude-code) covers the setup, and the [FAQ](faq.md#which-ai-client-should-i-use) compares the three supported clients side by side.
 
@@ -97,8 +97,8 @@ If you frequently work in long batches (real-estate sets, wedding selects, templ
 
 Editmamei writes per-user data to `~/.editmamei/`:
 
-- `~/.editmamei/sessions/<session-id>.ndjson` — one line per tool call, used for debugging and by the Templates system
-- `~/.editmamei/templates/<slug>/` — saved editing recipes (Pro only)
+- `~/.editmamei/sessions/<session-id>.ndjson`: one line per tool call, used for debugging and by the Templates system
+- `~/.editmamei/templates/<slug>/`: saved editing recipes (Pro only)
 
 These survive uninstall and upgrade. Delete them manually with `rm -rf ~/.editmamei/` if you want a clean slate.
 
@@ -106,40 +106,40 @@ These survive uninstall and upgrade. Delete them manually with `rm -rf ~/.editma
 
 ## Troubleshooting
 
-### "Tool not found" — the AI doesn't see Photoshop tools
+### "Tool not found": the AI doesn't see Photoshop tools
 
 Your MCP client didn't pick up the Editmamei registration. Check:
 
-1. Did you restart the client *fully* after installing? (Not just a new conversation — fully quit and reopen.)
+1. Did you restart the client *fully* after installing? (Not just a new conversation; fully quit and reopen.)
 2. Run `editmamei status` to confirm Editmamei is registered and Photoshop is detected.
-3. Run `editmamei install` again — it'll re-register and report any config errors.
-4. Check the client config file by hand (see [installation.md](installation.md)) — verify the `editmamei` entry is present and the JSON is valid.
+3. Run `editmamei install` again; it'll re-register and report any config errors.
+4. Check the client config file by hand (see [installation.md](installation.md)) and verify the `editmamei` entry is present and the JSON is valid.
 
-### "I need to do something no specific tool covers" — the escape hatch
+### When no specific tool covers what you need: the escape hatch
 
-If you hit a Photoshop operation Editmamei doesn't have a dedicated tool for, the AI can fall back to `photoshop_execute_script` — it sends an ExtendScript snippet directly to Photoshop and returns the result. This is the safety valve for edge cases the dedicated tool surface hasn't grown into yet; whether the AI reaches for it on its own depends on the AI client. If the AI seems stuck on "no tool for this," ask it to use `photoshop_execute_script` explicitly.
+If you hit a Photoshop operation Editmamei doesn't have a dedicated tool for, the AI can fall back to `photoshop_execute_script`, which sends an ExtendScript snippet directly to Photoshop and returns the result. This is the safety valve for edge cases the dedicated tool surface hasn't grown into yet; whether the AI reaches for it on its own depends on the AI client. If the AI seems stuck on "no tool for this," ask it to use `photoshop_execute_script` explicitly.
 
 ### Photoshop version support
 
-Editmamei is tested against **Photoshop 2026 (internal version 27.x)** — that's the only Photoshop version every ActionManager descriptor has been ground-truth captured against. Earlier versions (Photoshop 2025 / 2024 / 2023 / 2022) may work, but they're unverified; Adobe rotates event IDs between major versions and silent-no-op descriptor failures on untested PS majors cannot be ruled out. The auto-detector still finds older installs so you can try.
+Editmamei is tested against **Photoshop 2026 (internal version 27.x)**, the only Photoshop version every ActionManager descriptor has been ground-truth captured against. Earlier versions (Photoshop 2025 / 2024 / 2023 / 2022) may work, but they're unverified; Adobe rotates event IDs between major versions and silent-no-op descriptor failures on untested PS majors cannot be ruled out. The auto-detector still finds older installs so you can try.
 
-PS 2026 introduced a few descriptor changes that affected some adjustment-layer and selection paths; current builds work around the known ones. If you hit a tool that fails — on PS 2026 or any other version — [open an issue](https://github.com/editmamei/editmamei-wiki/issues) and include the output of `editmamei status` plus the relevant snippet from `~/.editmamei/sessions/<session-id>.ndjson`. Please mention your Photoshop version so we can route the bug correctly.
+PS 2026 introduced a few descriptor changes that affected some adjustment-layer and selection paths; current builds work around the known ones. If you hit a tool that fails (on PS 2026 or any other version), [open an issue](https://github.com/editmamei/editmamei-wiki/issues) and include the output of `editmamei status` plus the relevant snippet from `~/.editmamei/sessions/<session-id>.ndjson`. Please mention your Photoshop version so we can route the bug correctly.
 
 ### `photoshop_ping` hangs or times out
 
 Photoshop isn't responding to the automation request. Common causes:
 
 - **Photoshop isn't open.** Open it first, then retry.
-- **Different user accounts.** On Windows, Photoshop and the MCP client must run as the same user — COM automation respects user boundaries.
+- **Different user accounts.** On Windows, Photoshop and the MCP client must run as the same user; COM automation respects user boundaries.
 - **Photoshop is busy.** If a modal dialog is open (e.g. an unsaved-changes prompt, an Adobe sign-in modal), dismiss it and retry.
 - **macOS automation permissions.** First time only: macOS will prompt you to allow the MCP client to control Photoshop. Approve it in System Settings → Privacy & Security → Automation.
 
-### "Parameters not valid" on `photoshop_select_subject` / `photoshop_select_sky` / `photoshop_remove_background`
+### "Parameters not valid" on `photoshop_select_subject` / `photoshop_select_sky`
 
-These tools depend on Adobe's Sensei (cloud) AI features. The error usually means the Device-side model isn't downloaded.
+These Pro tools depend on Adobe's Sensei (cloud) AI features. The error usually means the Device-side model isn't downloaded.
 
 In Photoshop: **Preferences → Image Processing → Cloud → Process Locally (Device)**, then close and reopen Photoshop.
 
 ### Something else
 
-Open an issue at [github.com/editmamei/editmamei-wiki/issues](https://github.com/editmamei/editmamei-wiki/issues) — the bug report template will guide you through what to include. **Do not paste your license key in a public issue.**
+Open an issue at [github.com/editmamei/editmamei-wiki/issues](https://github.com/editmamei/editmamei-wiki/issues); the bug report template will guide you through what to include. **Do not paste your license key in a public issue.**

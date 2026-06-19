@@ -11,9 +11,9 @@ Thanks for thinking about what Editmamei could do next.
 
 A few things to know before you write:
 
-- The roadmap at editmamei.com/roadmap covers what's already planned. Check there first — your idea may already be queued.
+- The [roadmap](https://github.com/editmamei/editmamei-wiki/blob/main/docs/roadmap.md) covers what's already planned. Check there first; your idea may already be queued.
 - The richer the use case description, the easier this is to prioritize. "Add Camera Raw support" is harder to act on than "I need to apply Camera Raw develop settings programmatically because I work with raw files and ..."
-- Pro feature requests are welcome and tracked here too — just be clear about whether the request is something you'd expect in Community or in Pro.
+- Pro feature requests are welcome and tracked here too; just be clear about whether the request is something you'd expect in Community or in Pro.
 -->
 
 ## What you want to do

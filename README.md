@@ -73,7 +73,7 @@ The full capability surface, with live examples, is at [editmamei.com](https://e
 
 Community covers the everyday working-photographer surface, including straightening, layer transforms, and content-aware retouch. Pro adds the production toolkit: the reproducible-template system, Sensei-backed Select Subject and Select Sky, and Photoshop Actions plus scripting.
 
-What's planned for Pro after v1.0 is in the [roadmap](docs/roadmap.md). Full comparison and pricing at [editmamei.com/pricing](https://editmamei.com/pricing).
+What's planned for Pro later is in the [roadmap](docs/roadmap.md). Full comparison and pricing at [editmamei.com/pricing](https://editmamei.com/pricing).
 
 ---
 
@@ -99,7 +99,7 @@ Account, billing, or license questions go to [support@editmamei.com](mailto:supp
 - [Getting started](docs/getting-started.md): first session, ping test, first real edit
 - [Pro features](docs/pro-features.md): what Pro adds, with a pricing link
 - [FAQ](docs/faq.md): common questions
-- [Roadmap](docs/roadmap.md): what's planned after v1.0
+- [Roadmap](docs/roadmap.md): what's planned for Pro
 - [Privacy](docs/privacy.md): every telemetry field, and how to switch it off
 
 ---

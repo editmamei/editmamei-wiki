@@ -2,14 +2,14 @@
 
 This page describes exactly what the Editmamei software does with your data: what stays on
 your machine, what you control, how to control it, and the precise shape of everything that
-leaves. It's about the npm package you install — the `editmamei` MCP server — not about the
+leaves. It's about the npm package you install (the `editmamei` MCP server), not about the
 [editmamei.com](https://editmamei.com) website, which has its own
 [privacy policy](https://editmamei.com/privacy).
 
 The short version: your photos aren't uploaded to us. The only thing Editmamei sends to its own
 servers is anonymous, content-free usage data; it's documented field-for-field below, and you can
 switch it off with one command. (When your AI assistant needs to see an edit, a downscaled preview
-goes to that assistant — covered under "Your AI assistant is a cloud service" below.)
+goes to that assistant; covered under "Your AI assistant is a cloud service" below.)
 
 ---
 
@@ -24,7 +24,7 @@ There is one line Editmamei does not cross, on any setting or edition:
 - **Your metadata.** Camera info, GPS, and author fields are never part of what Editmamei
   transmits.
 
-The previews your AI assistant looks at are a separate matter — that's your AI client talking
+The previews your AI assistant looks at are a separate matter: that's your AI client talking
 to its own cloud, not Editmamei. See [Your AI assistant is a cloud service](#your-ai-assistant-is-a-cloud-service).
 
 ---
@@ -38,11 +38,11 @@ run. These are the keys:
 |---|---|---|---|
 | `telemetry.usage` | boolean | `true` (on) | Anonymous, content-free usage and reliability data. The opt-out tier. |
 | `telemetry.diagnostics` | boolean | `false` (off) | Extra sanitized error detail for bug-hunting. The opt-in tier. |
-| `telemetry.install_id` | string | random | Anonymous random ID, minted once, so installs can be counted without identifying you. **Read-only** — you can see it, but it isn't something you set. |
+| `telemetry.install_id` | string | random | Anonymous random ID, minted once, so installs can be counted without identifying you. **Read-only**: you can see it, but it isn't something you set. |
 | `privacy.send_previews_to_llm` | boolean | `true` | Reserved for an upcoming per-feature control over sending visual previews to your AI assistant. |
 | `photoshop_path` | string \| null | `null` | Pin a specific Photoshop binary. `null` = auto-detect (the `PHOTOSHOP_PATH` env var still wins if set). |
 
-`install_id` is a random value — it is **not** derived from your username, machine name, email,
+`install_id` is a random value; it is **not** derived from your username, machine name, email,
 or any other identifier.
 
 ---
@@ -78,10 +78,10 @@ editmamei config set telemetry.diagnostics true  # opt in to diagnostic detail
 
 Boolean values accept `true`/`false`, `on`/`off`, `yes`/`no`, or `1`/`0`.
 
-**In Claude Desktop.** The one-click extension has no terminal, so the same two switches —
-**Share anonymous usage stats** (opt-out) and **Share error diagnostics** (opt-in) — appear in the
-extension's own settings (Settings → Extensions → Editmamei). Toggling them there controls
-telemetry for Claude Desktop without editing any file.
+**In Claude Desktop.** The one-click extension has no terminal, so the same two switches appear in
+the extension's own settings (Settings → Extensions → Editmamei): **Share anonymous usage stats**
+(opt-out) and **Share error diagnostics** (opt-in). Toggling them there controls telemetry for
+Claude Desktop without editing any file.
 
 **First-run notice.** The first time Editmamei creates the settings file, it prints this to its
 log so the default is never a surprise:
@@ -100,10 +100,10 @@ log so the default is never a surprise:
 ## Exactly what data leaves
 
 When `telemetry.usage` is on, Editmamei sends a small, content-free subset of the local session
-log. Each event is one JSON object. Below is every field that can ever be sent — there are no
+log. Each event is one JSON object. Below is every field that can ever be sent; there are no
 hidden fields.
 
-### Usage event — one per tool call (on by default)
+### Usage event: one per tool call (on by default)
 
 ```json
 {
@@ -127,17 +127,17 @@ hidden fields.
 | `v` | Schema version (currently `2`). |
 | `type` | `"usage"`. |
 | `install_id` | Your anonymous random install ID. |
-| `ts_bucket` | The **day** only (`YYYY-MM-DD`) — never a precise timestamp. |
+| `ts_bucket` | The **day** only (`YYYY-MM-DD`), never a precise timestamp. |
 | `editmamei_version` | Which Editmamei version you're on. |
 | `edition` | `community` or `pro`. |
 | `platform` | Operating system only (`win32`, `darwin`, `linux`). |
 | `ps_version` | Your Photoshop version (e.g. `2026`), or `unknown`. |
 | `tool` | The tool name that ran (e.g. `photoshop_add_adjustment_layer`). |
 | `success` | Whether the call succeeded. |
-| `error_class` | On failure, a short error **category** (e.g. `missing_pixel_layer`) — never a message, never free text. `null` on success. |
+| `error_class` | On failure, a short error **category** (e.g. `missing_pixel_layer`), never a message or free text. `null` on success. |
 | `duration_ms` | How long the call took, in milliseconds. |
 
-### Session start — once when Editmamei launches (on by default)
+### Session start: once when Editmamei launches (on by default)
 
 ```json
 {
@@ -153,10 +153,10 @@ hidden fields.
 ```
 
 Sent once when Editmamei starts, so an install can be counted even before you run anything. Same
-content-free fields as above — **no tool name, no counts, no free text**. `ps_version` is usually
+content-free fields as above, with **no tool name, no counts, no free text**. `ps_version` is usually
 `unknown` because Photoshop hasn't been queried yet at startup.
 
-### Session summary — one per session (on by default)
+### Session summary: one per session (on by default)
 
 ```json
 {
@@ -177,7 +177,7 @@ content-free fields as above — **no tool name, no counts, no free text**. `ps_
 Counts only: how many tool calls in the session, how many distinct tools, and whether anything
 failed. No per-call detail.
 
-### Diagnostic event — only if you opt in
+### Diagnostic event: only if you opt in
 
 Sent **only** when you set `telemetry.diagnostics true`, and only when something fails:
 
@@ -199,7 +199,7 @@ Sent **only** when you set `telemetry.diagnostics true`, and only when something
 ```
 
 This adds a sanitized error message, the name of the failing step (`snippet`), and a trimmed
-tail of error output — enough to trace a bug without you mailing a log by hand. Still no image
+tail of error output, enough to trace a bug without you mailing a log by hand. Still no image
 content.
 
 ### What is deliberately never in any event
@@ -229,8 +229,8 @@ entirely** rather than sent.
 
 ## Where it goes
 
-Usage and diagnostic events are sent to Editmamei's **own** telemetry endpoint — not a
-third-party analytics company — where they're aggregated by day. Sending is batched and
+Usage and diagnostic events are sent to Editmamei's **own** telemetry endpoint (not a
+third-party analytics company), where they're aggregated by day. Sending is batched and
 best-effort: it happens in the background, times out quickly, and never retries or blocks your
 editing. If you're offline, events are simply dropped, never queued indefinitely.
 
@@ -240,7 +240,7 @@ editing. If you're offline, events are simply dropped, never queued indefinitely
 
 Separately from telemetry, Editmamei keeps a richer local log of each session at
 `~/.editmamei/sessions/<session-id>.ndjson`. This is used for debugging and by the Templates
-system to reconstruct an edit. It **stays on your disk** — it is not transmitted, and telemetry
+system to reconstruct an edit. It **stays on your disk**; it is not transmitted, and telemetry
 is only the small content-free subset described above, never this file. There's no automatic
 cleanup; delete the files whenever you like.
 
@@ -248,11 +248,11 @@ cleanup; delete the files whenever you like.
 
 ## Your AI assistant is a cloud service
 
-The AI assistant you drive Editmamei with — Claude Desktop, Cursor, and the like — is a cloud
+The AI assistant you drive Editmamei with (Claude Desktop, Cursor, and the like) is a cloud
 service governed by its own privacy policy. When you ask it to look at an image (for example,
 the visual-verification preview), Editmamei hands a downscaled JPEG to **that AI provider** on
 your behalf, exactly as if you'd dropped the file into a chat with it. That's a property of
-using a cloud AI, and a function of which assistant you choose — not a hop Editmamei adds.
+using a cloud AI, and a function of which assistant you choose, not a hop Editmamei adds.
 
 ---
 

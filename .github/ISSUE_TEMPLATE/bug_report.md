@@ -9,14 +9,14 @@ assignees: ''
 <!--
 Thanks for taking the time to report a bug.
 
-IMPORTANT — this issue tracker is PUBLIC. Anyone can read it.
+IMPORTANT: this issue tracker is PUBLIC. Anyone can read it.
 
 Before submitting, please double-check that you have NOT pasted:
 - Your Pro license key
 - Full file paths from sensitive or unfinished client projects
 - Screenshots containing unfinished client work, personal photos you don't want public, or other private content
 
-For account, billing, or license issues, email support@editmamei.com instead — those don't belong in a public tracker.
+For account, billing, or license issues, email support@editmamei.com instead; those don't belong in a public tracker.
 -->
 
 ## What happened

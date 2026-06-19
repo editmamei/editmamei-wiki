@@ -6,7 +6,7 @@
 
 ### How is "Editmamei" pronounced?
 
-Like **edamame** (ed-a-MAH-may) — yes, the soybean. If you've ever ordered it at a sushi place, you already know how to say the name.
+Like **edamame** (ed-a-MAH-may). Yes, the soybean. If you've ever ordered it at a sushi place, you already know how to say the name.
 
 ### Is Editmamei affiliated with Adobe?
 
@@ -14,17 +14,15 @@ No. Editmamei is an independent product. It is not affiliated with, endorsed by,
 
 ### Does Editmamei generate pixels with AI?
 
-No. Editmamei is an *orchestration* layer, not a *generation* layer. The AI assistant plans the steps — which adjustments, which selections, in what order — and Photoshop carries them out using its own standard non-generative tools (adjustment layers, masks, selections, filters). Your pixels are only ever changed by Photoshop itself; no generative model touches them. "AI orchestration, not generation" is the short version.
+No. Editmamei is an *orchestration* layer, not a *generation* layer. The AI assistant plans the steps (which adjustments, which selections, in what order), and Photoshop carries them out using its own standard non-generative tools (adjustment layers, masks, selections, filters). Your pixels are only ever changed by Photoshop itself; no generative model touches them. "AI orchestration, not generation" is the short version.
 
 ### Is Editmamei open source?
 
-The compiled Community Edition binary is freely available on npm, but the source is proprietary. See the [LICENSE on editmamei.com](https://editmamei.com/license) for the full text. Third-party open-source dependencies retain their original licenses — full list in the `NOTICES.md` bundled with the npm package.
-
-There is an **abandonment clause** in the license: if Editmamei is unmaintained for 24 consecutive months, the codebase is automatically relicensed under MIT.
+The compiled Community Edition binary is freely available on npm, but the source is proprietary. See the [LICENSE on editmamei.com](https://editmamei.com/license) for the full text. Third-party open-source dependencies retain their original licenses; the full list is in the `NOTICES.md` bundled with the npm package.
 
 ### Where does the project name come from?
 
-Pronunciation is a near-homophone of "edamame" — a deliberate choice for memorability and personality. "Edit" + "mamei" reflects what the tool does (edits) and how it sounds (snack).
+Pronunciation is a near-homophone of "edamame," a deliberate choice for memorability and personality. "Edit" + "mamei" reflects what the tool does (edits) and how it sounds (snack).
 
 ---
 
@@ -38,7 +36,7 @@ Officially:
 - [Cursor](https://cursor.com/)
 - [Claude Code](https://claude.ai/code)
 
-Any MCP-compatible client should work — Editmamei is a standard MCP stdio server. `editmamei install` auto-configures Claude Desktop; for Cursor, Claude Code, or other clients, the [manual configuration steps](installation.md#manual-configuration) show what to put in your client's config.
+Any MCP-compatible client should work; Editmamei is a standard MCP stdio server. `editmamei install` auto-configures Claude Desktop; for Cursor, Claude Code, or other clients, the [manual configuration steps](installation.md#manual-configuration) show what to put in your client's config.
 
 ### Which AI client should I use?
 
@@ -54,23 +52,23 @@ If you're not sure: start on Desktop. Move to Code the first time you feel a ses
 
 ### Which Photoshop versions are supported?
 
-**Photoshop 2026 (internal version 27.x).** That's the only Photoshop version Editmamei has been verified against — every ActionManager descriptor we emit was captured against PS 27.x on Windows and macOS.
+**Photoshop 2026 (internal version 27.x).** That's the only Photoshop version Editmamei has been verified against; every ActionManager descriptor we emit was captured against PS 27.x on Windows and macOS.
 
-Earlier versions (Photoshop 2025 / 2024 / 2023 / 2022) may work — the DOM-level APIs and most AM events are stable across recent majors — but they're unverified. Adobe is known to rotate event IDs between major versions, and a tool that string-match-tests fine in the source can still silent-no-op against a different PS major. The auto-detector still finds older installs so you can try, but failing tools on unsupported versions are a known unsupported-version risk, not a bug.
+Earlier versions (Photoshop 2025 / 2024 / 2023 / 2022) may work (the DOM-level APIs and most AM events are stable across recent majors), but they're unverified. Adobe is known to rotate event IDs between major versions, and a tool that string-match-tests fine in the source can still silent-no-op against a different PS major. The auto-detector still finds older installs so you can try, but failing tools on unsupported versions are a known unsupported-version risk, not a bug.
 
 ### Does Editmamei work on Linux?
 
-No. Editmamei drives Photoshop through Windows COM automation or macOS AppleScript / OSA — both are OS-specific. Photoshop itself is not supported on Linux.
+No. Editmamei drives Photoshop through Windows COM automation or macOS AppleScript / OSA, both OS-specific. Photoshop itself is not supported on Linux.
 
 ### Does it need an internet connection?
 
-Core editing doesn't — Editmamei never requires a network call to drive Photoshop. The one call Editmamei makes on its own is anonymous, content-free usage telemetry (which tools ran, whether they succeeded, version/OS/Photoshop version), sent in the background and best-effort. It carries no images, paths, or personal data, and you can switch it off with `editmamei config set telemetry.usage false`. Every field that's collected is documented in [privacy.md](privacy.md).
+Core editing doesn't. Editmamei never requires a network call to drive Photoshop. The one call Editmamei makes on its own is anonymous, content-free usage telemetry (which tools ran, whether they succeeded, version/OS/Photoshop version), sent in the background and best-effort. It carries no images, paths, or personal data, and you can switch it off with `editmamei config set telemetry.usage false`. Every field that's collected is documented in [privacy.md](privacy.md).
 
-Your AI assistant is separate. Editmamei runs as a stdio subprocess of your AI assistant (Claude Desktop, Cursor, etc.), and that assistant is itself a cloud service governed by its own privacy policy. When you ask the AI to look at a visual preview, Editmamei sends a downscaled JPEG to *that AI provider* on your behalf — exactly as if you'd dropped the file into a chat with it. So an internet connection is required for the AI to function, even if Editmamei the server isn't transmitting anything itself.
+Your AI assistant is separate. Editmamei runs as a stdio subprocess of your AI assistant (Claude Desktop, Cursor, etc.), and that assistant is itself a cloud service governed by its own privacy policy. When you ask the AI to look at a visual preview, Editmamei sends a downscaled JPEG to *that AI provider* on your behalf, exactly as if you'd dropped the file into a chat with it. So an internet connection is required for the AI to function, even if Editmamei the server isn't transmitting anything itself.
 
 ### Does it need Generative Fill / Adobe cloud features?
 
-No. Editmamei runs against the standard ExtendScript automation surface, which has been in every Photoshop install since the early 2010s. No tool that ships in the current build invokes Generative Fill or any other Adobe generative feature — Editmamei is an orchestration layer, not a generation layer.
+No. Editmamei runs against the standard ExtendScript automation surface, which has been in every Photoshop install since the early 2010s. No tool that ships in the current build invokes Generative Fill or any other Adobe generative feature. Editmamei is an orchestration layer, not a generation layer.
 
 ### Does Editmamei work with Photoshop Elements?
 
@@ -82,7 +80,7 @@ No. Photoshop Elements does not expose the same scripting interface that full Ph
 
 ### Can the AI mess up my files?
 
-The AI works on the open document in Photoshop, the same way you would. Standard Photoshop undo/redo applies — `photoshop_undo` and `photoshop_redo` are exposed as tools, and the AI uses them. You can also revert at any point through Photoshop's File → Revert.
+The AI works on the open document in Photoshop, the same way you would. Standard Photoshop undo/redo applies; `photoshop_undo` and `photoshop_redo` are exposed as tools, and the AI uses them. You can also revert at any point through Photoshop's File → Revert.
 
 The AI will not save over your original files unless you explicitly ask it to. Save and export tools all take explicit file paths.
 
@@ -98,7 +96,7 @@ Through `photoshop_get_preview`, which returns a downscaled JPEG of the current 
 
 ### Does Editmamei collect any data about my edits?
 
-Nothing about the content of your edits goes to us — no images, document data, or file paths. Editmamei does send anonymous, content-free usage data (which tools ran, whether they succeeded, how long they took), which you can switch off; see [privacy.md](privacy.md) for every field. Separately, a richer local session log is written to `~/.editmamei/sessions/<session-id>.ndjson` (used for debugging and by the Templates system) that stays on your disk and is **not** transmitted. (When your AI assistant needs to see an edit, a downscaled preview goes to that assistant — see "Does it need an internet connection?" above; and what your AI client does with content you share in chat is governed by its own [privacy policy](https://editmamei.com/privacy).)
+Nothing about the content of your edits goes to us: no images, document data, or file paths. Editmamei does send anonymous, content-free usage data (which tools ran, whether they succeeded, how long they took), which you can switch off; see [privacy.md](privacy.md) for every field. Separately, a richer local session log is written to `~/.editmamei/sessions/<session-id>.ndjson` (used for debugging and by the Templates system) that stays on your disk and is **not** transmitted. (When your AI assistant needs to see an edit, a downscaled preview goes to that assistant, per "Does it need an internet connection?" above; and what your AI client does with content you share in chat is governed by its own [privacy policy](https://editmamei.com/privacy).)
 
 ### Can I run Editmamei against multiple Photoshop versions installed side by side?
 
@@ -119,15 +117,15 @@ This is a property of the AI client, not of Editmamei or Photoshop. Two things h
 
 ### What's the difference between Community and Pro?
 
-See the full breakdown in [pro-features.md](pro-features.md). Short version: Community covers the full working-photographer editing surface — documents, layers, layer transforms and straightening, non-destructive adjustment layers, filters, content-aware retouch (Content-Aware Fill, Patch, Content-Aware Move), layer styles, masks, Magic Wand and rectangle/feather selections, per-channel histograms and visual verification, history, text, image placement. Pro adds three things on top: the **whole reproducible-template system** (create, save, apply, verify, recall), the **Sensei-backed** Select Subject and Select Sky, and **Photoshop Actions + ExtendScript scripting**. See the canonical editions table in the [main README](../README.md#editions).
+See the full breakdown in [pro-features.md](pro-features.md). Short version: Community covers the full working-photographer editing surface: documents, layers, layer transforms and straightening, non-destructive adjustment layers, filters, content-aware retouch (Content-Aware Fill, Patch, Content-Aware Move), layer styles, masks, Magic Wand and rectangle/feather selections, per-channel histograms and visual verification, history, text, image placement. Pro adds three things on top: the **whole reproducible-template system** (create, save, apply, verify, recall), the **Sensei-backed** Select Subject and Select Sky, and **Photoshop Actions + ExtendScript scripting**. See the canonical editions table in the [main README](../README.md#editions).
 
 ### How do I activate a Pro license?
 
-Pro activation lands with the v1.0 launch. See [pro-features.md](pro-features.md) for what Pro adds and [roadmap.md](roadmap.md) for current status.
+Pro is coming soon. Community is free and available today; Pro isn't purchasable yet. When it launches you'll buy at [editmamei.com/pricing](https://editmamei.com/pricing) and activate it over your existing Community install, and the exact steps will be documented here. See [pro-features.md](pro-features.md) for what Pro adds.
 
 ### Do you offer a free trial?
 
-Trial and refund policy will be published at [editmamei.com/pricing](https://editmamei.com/pricing) with the v1.0 launch.
+Trial and refund details will be published at [editmamei.com/pricing](https://editmamei.com/pricing) when Pro launches.
 
 ---
 
@@ -139,7 +137,7 @@ Trial and refund policy will be published at [editmamei.com/pricing](https://edi
 
 ### Where do I ask account or billing questions?
 
-Email [support@editmamei.com](mailto:support@editmamei.com). Do not file billing issues in the public GitHub tracker — your invoice details don't belong there.
+Email [support@editmamei.com](mailto:support@editmamei.com). Do not file billing issues in the public GitHub tracker; your invoice details don't belong there.
 
 ### How do I report a security issue?
 
