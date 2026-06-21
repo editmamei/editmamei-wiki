@@ -12,6 +12,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+## [0.18.0] — 2026-06-21
+
+### Changed
+
+- **The tool surface is now organized around what you want to do, not one tool per Photoshop command.** Twelve families of near-identical tools collapsed into single, mode-selected tools, so the assistant sees a much smaller, clearer menu (roughly 90 community tools down to ~50) — it picks the right tool more reliably, and one "always allow" approval now covers a whole family instead of each variant. Every capability and parameter is preserved; only the tool names changed.
+  - Phase 1 of the tool-surface consolidation ([`docs/20260620-tool-surface-reorg-plan.md`](docs/20260620-tool-surface-reorg-plan.md)). The 12 new discriminated tools: `photoshop_apply_filter(type)` (was 13 separate `apply_*` blur/sharpen/noise/stylize filters), `photoshop_select(mode)` (rectangle / color_range / luminance_range / magic_wand / all / deselect / invert), `photoshop_set_layer(property)` (opacity / blend_mode / visibility / locked / rename), `photoshop_transform_layer(op)` (fit / scale / move / rotate / flip), `photoshop_set_text(property)` (font / color / alignment / content), `photoshop_apply_adjustment(type)` (shadows_highlights / equalize / color_lookup), `photoshop_retouch(method)` (content-aware fill / patch / move), `photoshop_merge(mode)` (merge-visible / stamp / flatten), `photoshop_layer_mask(op)` (create / delete / apply), `photoshop_modify_selection(op)` (feather / refine_edge), `photoshop_selection_channel(op)` (save / load), and `photoshop_export(format)` (jpeg / png).
+  - Internals are unchanged: each consolidated tool validates against the same per-variant schema and dispatches to the same handler + ExtendScript snippet as before, so behavior, defaults, value ranges, auto-duplicate-first, background-auto-promote, and structured outputs are identical to the pre-consolidation tools.
+  - Unchanged: `photoshop_add_adjustment_layer` (the non-destructive adjustment entry point), the read-only inspection tools, and the whole Pro surface (AI selection, templates, actions/scripting). The inspection-reader consolidation (`photoshop_inspect`) is a planned follow-up.
+
+---
+
 ## [0.17.5] — 2026-06-20
 
 ### Fixed
@@ -973,7 +984,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-wiki/compare/v0.17.5...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-wiki/compare/v0.18.0...HEAD
+[0.18.0]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.18.0
 [0.17.5]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.17.5
 [0.17.4]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.17.4
 [0.17.3]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.17.3
