@@ -29,6 +29,25 @@ to its own cloud, not Editmamei. See [Your AI assistant is a cloud service](#you
 
 ---
 
+## Diagnostic reports (you generate, you share)
+
+When something breaks, you — or your assistant, via the `photoshop_report_problem` tool or the
+`editmamei report` command — can generate a **diagnostic bundle**: a single
+`editmamei-diagnostics-<id>.json` file saved to your **Downloads** folder. Editmamei never
+uploads it. You review the file and attach it to a bug report yourself.
+
+The bundle is sanitized to the same hard line as everything above:
+
+- **No image or document content**, **no tool arguments**, and file paths reduced to basenames.
+- It holds recent server log lines, your OS / Editmamei / Photoshop versions, your anonymous
+  `install_id`, and a content-free summary of recent tool calls (name, success, duration, error
+  class — never the arguments). If a Claude Desktop log is present, a redacted tail is included
+  with every request and response **body** removed — only method names and timing are kept.
+
+Because it's a local file, you can open it and see exactly what you're sharing before you send it.
+
+---
+
 ## What you control
 
 Every setting lives in a single plain-text file, `~/.editmamei/settings.json`, created on first

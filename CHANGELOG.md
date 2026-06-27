@@ -12,6 +12,21 @@ _Nothing yet — the next change appends here._
 
 ---
 
+## [0.20.0] — 2026-06-27
+
+### Added
+
+- **Report a problem in one step.** When Editmamei misbehaves, your assistant can now generate an anonymized diagnostic bundle — recent logs plus system info — saved to your Downloads folder so you can attach it to a bug report. Surface addition → MINOR.
+  - New `photoshop_report_problem` tool (and an `editmamei report` CLI command) writes `editmamei-diagnostics-<id>.json` to Downloads. The bundle is content-free by construction: recent server log lines, OS / Editmamei / Photoshop versions, your anonymous install id, and a summary of recent tool calls (name, success, duration, error class). It carries NO image content, NO tool arguments, and file paths are reduced to basenames; the Claude Desktop log tail has its request/response bodies redacted (method + timing kept). Nothing is uploaded — you review the file and attach it yourself.
+  - A new "Capture verbose diagnostics" toggle in the Claude Desktop extension settings raises logging detail so a bundle captured after reproducing an issue carries more. Logs stay on your machine; nothing is sent.
+
+### Fixed
+
+- **Editmamei connects instantly instead of hanging ~30 seconds at startup.** The extension no longer waits on Photoshop before answering your AI client's connection handshake, so the "Unable to connect to extension server" delay on launch — when Photoshop is closed, launching, or busy — is gone. PATCH-class.
+  - At boot the server now connects its MCP transport first and warms up the Photoshop connection in the background, instead of pinging Photoshop (which blocks for up to a 30-second timeout when PS isn't reachable) before announcing itself. Diagnosed from Claude Desktop logs showing a ~30-second gap between the client's `initialize` request and the server's response.
+
+---
+
 ## [0.19.0] — 2026-06-27
 
 ### Added
@@ -1021,7 +1036,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-wiki/compare/v0.19.0...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-wiki/compare/v0.20.0...HEAD
+[0.20.0]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.20.0
 [0.19.0]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.19.0
 [0.18.0]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.18.0
 [0.17.5]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.17.5
