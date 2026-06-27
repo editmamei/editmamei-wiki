@@ -8,18 +8,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-(No user-facing changes pending — next commit appends here.)
+_Nothing yet — the next change appends here._
 
 ---
 
-## [0.18.0] — 2026-06-21
+## [0.18.0] — 2026-06-27
+
+### Added
+
+- **A live "what tools exist" map.** A new read-only tool returns the whole surface organized by capability group — each group's purpose plus the tool names in it — so the assistant can re-orient mid-session without re-reading the full workflow brief. Surface addition → MINOR when released.
+  - `photoshop_list_capabilities` (read-only, no args). Returns `{ tool_count, group_count, groups: [{ id, label, purpose, tools[] }] }`, reflecting the live registered surface for this build/edition (Pro/dev groups appear only when present). Sits between `photoshop_overview` (how to work) and `tools/list` (full schemas) in the discovery chain; the overview + skill point to it as the re-orientation tool. Group taxonomy lives in `src/core/tool-groups.ts`. Design: [`docs/20260626-tool-surface-organization-model.md`](docs/20260626-tool-surface-organization-model.md) §6.
+- **Local computer vision and vector-path tools graduate to the free edition.** On-device perception — it analyzes the image locally, nothing leaves the machine — and the vector-path tools that had been in testing are now part of CE, so the assistant can work from real coordinates instead of guessing from a preview. Surface addition → MINOR when released.
+  - Promoted dev → community: `photoshop_detect` (faces + COCO-80 objects as real document-pixel boxes), `photoshop_scene` (a structured, confidence-gated scene read — subjects / horizon / tonal zones, per the v2 model), `photoshop_select_by_reference` (a named target → a real pixel selection instead of a guessed rectangle), `photoshop_path` (selection↔path round-trip + stroke / fill / clip), and `photoshop_vector_mask` (add / delete / link / unlink).
+  - The `.mcpb` one-click bundle already prunes the unused ONNX wasm variants, so adding local CV doesn't balloon it. `photoshop_overview` now advertises the Perception capability. Promotion rationale + the dev-tool landing decisions: [`docs/20260626-tool-surface-organization-model.md`](docs/20260626-tool-surface-organization-model.md) §5.
+- **Pro gains precise face-mesh + custom-warp tools.** Mesh-accurate facial geometry and the custom-mesh warp graduate from testing into the paid edition. Surface addition → MINOR when released.
+  - Promoted dev → pro: `photoshop_detect_landmarks` (the 468-point face mesh as labelled groups / anchors / centres in document pixels — analyzed locally, the image never leaves the machine), `photoshop_select_face_feature` (mesh → a loadable selection of eyes / teeth / skin / …), `photoshop_warp_layer_mesh` (pin-one-edge custom mesh warp: rise / bend / taper), and `photoshop_select_subject_instance` (CV-aimed Sensei — detect one instance, select just it). All live-verified (`pro-face-mesh.md` L0/L2; the 2026-06-24 warp run; the scene-v2 10-photo trial).
+  - These ship in the downloaded Pro module (the face-mesh weight lives in `models/pro/`), so delivering them is the Pro-module re-publish runbook, separate from the host release. `photoshop_stroke_face_contour` stays dev pending the brush-dynamics capture.
 
 ### Changed
 
 - **The tool surface is now organized around what you want to do, not one tool per Photoshop command.** Twelve families of near-identical tools collapsed into single, mode-selected tools, so the assistant sees a much smaller, clearer menu (roughly 90 community tools down to ~50) — it picks the right tool more reliably, and one "always allow" approval now covers a whole family instead of each variant. Every capability and parameter is preserved; only the tool names changed.
   - Phase 1 of the tool-surface consolidation ([`docs/20260620-tool-surface-reorg-plan.md`](docs/20260620-tool-surface-reorg-plan.md)). The 12 new discriminated tools: `photoshop_apply_filter(type)` (was 13 separate `apply_*` blur/sharpen/noise/stylize filters), `photoshop_select(mode)` (rectangle / color_range / luminance_range / magic_wand / all / deselect / invert), `photoshop_set_layer(property)` (opacity / blend_mode / visibility / locked / rename), `photoshop_transform_layer(op)` (fit / scale / move / rotate / flip), `photoshop_set_text(property)` (font / color / alignment / content), `photoshop_apply_adjustment(type)` (shadows_highlights / equalize / color_lookup), `photoshop_retouch(method)` (content-aware fill / patch / move), `photoshop_merge(mode)` (merge-visible / stamp / flatten), `photoshop_layer_mask(op)` (create / delete / apply), `photoshop_modify_selection(op)` (feather / refine_edge), `photoshop_selection_channel(op)` (save / load), and `photoshop_export(format)` (jpeg / png).
   - Internals are unchanged: each consolidated tool validates against the same per-variant schema and dispatches to the same handler + ExtendScript snippet as before, so behavior, defaults, value ranges, auto-duplicate-first, background-auto-promote, and structured outputs are identical to the pre-consolidation tools.
-  - Unchanged: `photoshop_add_adjustment_layer` (the non-destructive adjustment entry point), the read-only inspection tools, and the whole Pro surface (AI selection, templates, actions/scripting). The inspection-reader consolidation (`photoshop_inspect`) is a planned follow-up.
+- **Document inspection is now one tool instead of four.** The read-only state readers are unified under a single inspect tool you point at what you want to read, so the assistant sees a smaller, clearer menu while every capability and parameter is preserved. Surface contraction → MINOR when released.
+  - Phase 1b of the tool-surface consolidation ([`docs/20260626-tool-surface-organization-model.md`](docs/20260626-tool-surface-organization-model.md) §4). `photoshop_get_metadata` / `photoshop_get_layer_tree` / `photoshop_get_history` / `photoshop_get_selection_info` → `photoshop_inspect(what='metadata' | 'layer_tree' | 'history' | 'selection_info')`. The `sections` subset param is preserved on `what='metadata'`.
+  - Internals unchanged: `photoshop_inspect` strips `what` and delegates to the same per-reader handler + ExtendScript snippet as before; output shapes are identical.
+  - The verification primitives stay separate, named tools on purpose — `photoshop_get_preview`, `photoshop_get_histogram`, `photoshop_compare_regions`, `photoshop_get_layer_bounds_diff`, `photoshop_get_selection_preview` — because they are the measurement surface the assistant should reach for, not bury in a mega-getter.
+
+### Fixed
+
+- **Baking a plain layer no longer fails.** Flattening a layer that has nothing clipped to it now produces the baked pixel layer as expected, instead of erroring with a Photoshop "command not currently available" message. PATCH-class when released.
+  - `photoshop_bake_layer` on a single-layer clip group (the active layer with no clipped adjustments above it) drove Photoshop's Merge Visible, which requires ≥2 visible layers and was rejected ("Merge Visible is not currently available"). It now detects the single-layer case and bakes by duplicating the layer and rasterizing its full appearance — styles / smart-object / text content — into a flat pixel layer (a group base is merged instead); the multi-layer clip-group path keeps the proven Merge-Visible stamp. Live-verified on PS 2026 (community live-smoke `bake-stamp` step, run 2026-06-27).
+
+### Security
+
+- **Pro module integrity is re-verified at every boot, not only at install.** The host now re-hashes the retained encrypted artifact, re-checks its Ed25519 signature against the pinned key, and regenerates the decrypted handlers + binary from that verified artifact before importing them — closing an install→boot window where a local process could have swapped the decrypted code. Fail-closed: any mismatch loads the Community surface instead.
+- **The delivery endpoint must use HTTPS.** A non-loopback `EDITMAMEI_DELIVERY_URL` is rejected unless `https://`, so the license key (request header) and AES content key (response body) can't cross a plaintext origin. A manifest that points at an older, still-signed module version is refused (no signed downgrade).
+- **Opt-in diagnostics redaction tightened** so a forward-slash POSIX path or a bare top-level directory name can't reach telemetry; the absolute-path guard now backstops POSIX paths too.
+- **The Go core allow-lists its ExtendScript enum slots** (layer blend mode, text alignment, noise distribution, new-document color mode) so a caller-supplied string can't break out of an identifier slot — the Go core no longer leans on the upstream schema as its only gate.
 
 ---
 
