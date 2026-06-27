@@ -41,6 +41,7 @@ run. These are the keys:
 | `telemetry.install_id` | string | random | Anonymous random ID, minted once, so installs can be counted without identifying you. **Read-only**: you can see it, but it isn't something you set. |
 | `privacy.send_previews_to_llm` | boolean | `true` | Reserved for an upcoming per-feature control over sending visual previews to your AI assistant. |
 | `photoshop_path` | string \| null | `null` | Pin a specific Photoshop binary. `null` = auto-detect (the `PHOTOSHOP_PATH` env var still wins if set). |
+| `update_check` | boolean | `true` (on) | Check the public npm registry at startup for a newer version (see "Update check" below). The opt-out tier. |
 
 `install_id` is a random value; it is **not** derived from your username, machine name, email,
 or any other identifier.
@@ -233,6 +234,23 @@ Usage and diagnostic events are sent to Editmamei's **own** telemetry endpoint (
 third-party analytics company), where they're aggregated by day. Sending is batched and
 best-effort: it happens in the background, times out quickly, and never retries or blocks your
 editing. If you're offline, events are simply dropped, never queued indefinitely.
+
+---
+
+## Update check
+
+When `update_check` is on (the default), Editmamei makes **one** request at startup to the
+**public npm registry** (`registry.npmjs.org`) to ask what the latest published version is, and —
+if you're behind — tells you so the next time you check the connection. This is the one request
+that goes to npm rather than Editmamei's own endpoint; it's an ordinary registry lookup, the same
+public data `npm` itself reads.
+
+- It sends **no usage data and no identifiers** — it's a plain "what's the latest version?" GET. No
+  images, file paths, install ID, or personal data are involved.
+- It's best-effort: it times out quickly, never retries, and never blocks startup. Offline → it's
+  silently skipped.
+- Turn it off with `update_check false` (CLI or settings file), or the **Check for updates** toggle
+  in the Claude Desktop extension settings.
 
 ---
 

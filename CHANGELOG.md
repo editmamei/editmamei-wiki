@@ -12,6 +12,17 @@ _Nothing yet — the next change appends here._
 
 ---
 
+## [0.19.0] — 2026-06-27
+
+### Added
+
+- **Editmamei now tells you when a newer version is out.** At startup it checks whether a newer release is published and surfaces it the next time you check the connection, with the exact update step for how you installed. Surface addition → MINOR when released.
+  - A boot-time check hits the public npm registry once (anonymous, content-free — no images, paths, or usage data) and caches the result; `photoshop_ping` returns an `update_available` field (`current` → `latest` + `how_to_update`) so the assistant can relay it. An MCP server's stderr never reaches the user, so a tool result is the only reliable channel — and `photoshop_ping` is the mandated first call of a session.
+  - The remediation is install-aware: an npm install gets `npm install -g editmamei@latest`; the one-click `.mcpb` install is told to download the new bundle and reinstall the Claude Desktop extension.
+  - Opt out with `editmamei config set update_check false`, or the new "Check for updates" toggle in the Claude Desktop extension settings. Fail-silent and never blocks startup. See `src/update/check.ts` + `src/install-channel.ts`.
+
+---
+
 ## [0.18.0] — 2026-06-27
 
 ### Added
@@ -1010,7 +1021,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-wiki/compare/v0.18.0...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-wiki/compare/v0.19.0...HEAD
+[0.19.0]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.19.0
 [0.18.0]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.18.0
 [0.17.5]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.17.5
 [0.17.4]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.17.4
