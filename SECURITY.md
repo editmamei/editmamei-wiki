@@ -1,6 +1,6 @@
 # Security policy
 
-Editmamei is a Model Context Protocol (MCP) server that drives Adobe Photoshop. Like every MCP server, it executes scripts produced by an upstream AI assistant. Editmamei specifically exposes `photoshop_execute_script`, an explicit "escape hatch" tool that runs arbitrary ExtendScript inside Photoshop on the user's machine. **Editmamei's trust boundary is "the MCP client is trusted."** If that assumption is wrong on your setup, security findings against the package matter a great deal.
+Editmamei is a Model Context Protocol (MCP) server that drives Adobe Photoshop. Like every MCP server, it executes scripts produced by an upstream AI assistant. Editmamei specifically exposes `ps_execute_script`, an explicit "escape hatch" tool that runs arbitrary ExtendScript inside Photoshop on the user's machine. **Editmamei's trust boundary is "the MCP client is trusted."** If that assumption is wrong on your setup, security findings against the package matter a great deal.
 
 We take security reports seriously and want to make it easy to send one.
 
@@ -26,7 +26,7 @@ In scope:
 
 - The published `editmamei` npm package, all editions.
 - The CLI subcommands (`editmamei install / uninstall / status / help`).
-- The MCP tool surface, including `photoshop_execute_script`'s safety boundary.
+- The MCP tool surface, including `ps_execute_script`'s safety boundary.
 - The session log + template system at `~/.editmamei/`.
 
 Out of scope (for this package):

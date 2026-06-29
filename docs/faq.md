@@ -80,7 +80,7 @@ No. Photoshop Elements does not expose the same scripting interface that full Ph
 
 ### Can the AI mess up my files?
 
-The AI works on the open document in Photoshop, the same way you would. Standard Photoshop undo/redo applies; `photoshop_undo` and `photoshop_redo` are exposed as tools, and the AI uses them. You can also revert at any point through Photoshop's File → Revert.
+The AI works on the open document in Photoshop, the same way you would. Standard Photoshop undo/redo applies; `ps_undo` and `ps_redo` are exposed as tools, and the AI uses them. You can also revert at any point through Photoshop's File → Revert.
 
 The AI will not save over your original files unless you explicitly ask it to. Save and export tools all take explicit file paths.
 
@@ -92,7 +92,7 @@ The current Community tool surface does not include a file-deletion tool. The AI
 
 ### How does the AI know what the image looks like?
 
-Through `photoshop_get_preview`, which returns a downscaled JPEG of the current document state. The AI calls this when it needs to verify its own work or judge an aesthetic outcome. It can also call `photoshop_get_histogram` for per-channel pixel distributions and `photoshop_get_metadata` for dimensions, color mode, and embedded profile.
+Through `ps_get_preview`, which returns a downscaled JPEG of the current document state. The AI calls this when it needs to verify its own work or judge an aesthetic outcome. It can also call `ps_get_histogram` for per-channel pixel distributions and `photoshop_get_metadata` for dimensions, color mode, and embedded profile.
 
 ### Does Editmamei collect any data about my edits?
 

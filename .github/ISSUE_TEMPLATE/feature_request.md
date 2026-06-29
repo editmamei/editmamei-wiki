@@ -34,7 +34,7 @@ What's the use case? Who benefits? How often does this come up in your workflow?
 ## What you've tried
 
 <!--
-Have you found a workaround using existing tools? Used photoshop_execute_script to script it manually? Tried a different MCP server? Any context that shows the gap.
+Have you found a workaround using existing tools? Used ps_execute_script to script it manually? Tried a different MCP server? Any context that shows the gap.
 -->
 
 ## Edition you'd expect this in

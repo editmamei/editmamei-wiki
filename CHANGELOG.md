@@ -12,6 +12,18 @@ _Nothing yet — the next change appends here._
 
 ---
 
+## [0.21.0] — 2026-06-28
+
+### Changed
+
+- **Every tool was renamed to a shorter, clearer prefix.** The MCP tool surface dropped the legacy prefix — a redundant second namespace layered on top of the MCP server name — for a compact one, and several vague names gained verbs. Breaking for any workflow that hardcoded a tool name; the AI picks up the new names automatically from the live tool list.
+  - All 82 tools moved `photoshop_*` → `ps_*` (e.g. `ps_create_layer`, `ps_apply_filter`, `ps_select_sky`, `ps_template_save`).
+  - Verb-first fixes for previously vague names: `photoshop_scene` → `ps_read_scene`, `photoshop_object` → `ps_edit_object`, `photoshop_text_on_object` → `ps_add_text_to_object`, `photoshop_layer_via_copy` → `ps_copy_to_new_layer`.
+  - Multi-op dispatchers keep an object-noun name (`ps_path`, `ps_layer_mask`, `ps_merge`, `ps_guides`) — their `op`/`mode`/`method` enum already carries the verb.
+  - Full old→new map, the naming rule, and rationale: `docs/20260628-tool-rename.md`.
+
+---
+
 ## [0.20.0] — 2026-06-27
 
 ### Added
@@ -1036,7 +1048,8 @@ license activation flow land in v1.0.0.
 
 ---
 
-[Unreleased]: https://github.com/editmamei/editmamei-wiki/compare/v0.20.0...HEAD
+[Unreleased]: https://github.com/editmamei/editmamei-wiki/compare/v0.21.0...HEAD
+[0.21.0]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.21.0
 [0.20.0]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.20.0
 [0.19.0]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.19.0
 [0.18.0]: https://github.com/editmamei/editmamei-wiki/releases/tag/v0.18.0

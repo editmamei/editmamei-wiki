@@ -51,27 +51,27 @@ Pro extends the surface for professional non-destructive workflows, batch editin
 
 A template is a reproducible aesthetic recipe: capture a finished edit as a named bundle, then apply it later to new images. The **entire template surface is Pro**, authoring and use alike.
 
-- `photoshop_template_create_evidence`: gathers session evidence (tool calls, history states, metadata snapshot) and renders before/after previews
-- `photoshop_template_save`: saves the template bundle to `~/.editmamei/templates/<slug>/`, optionally with a machine-checkable style signature
-- `photoshop_template_delete`: removes a saved template
-- `photoshop_template_list`: lists saved templates
-- `photoshop_template_apply`: applies a saved template to the current image; the AI re-derives each value for the new photo and self-judges against the template's exit criteria
-- `photoshop_template_verify`: measures the current document against a template's machine-checkable style signature, with a corrective steer per miss
-- `photoshop_template_recall`: re-surfaces one section of a template (exit criteria, tune dials, signature) as text, cheaply, late in a long session
+- `ps_template_create_evidence`: gathers session evidence (tool calls, history states, metadata snapshot) and renders before/after previews
+- `ps_template_save`: saves the template bundle to `~/.editmamei/templates/<slug>/`, optionally with a machine-checkable style signature
+- `ps_template_delete`: removes a saved template
+- `ps_template_list`: lists saved templates
+- `ps_template_apply`: applies a saved template to the current image; the AI re-derives each value for the new photo and self-judges against the template's exit criteria
+- `ps_template_verify`: measures the current document against a template's machine-checkable style signature, with a corrective steer per miss
+- `ps_template_recall`: re-surfaces one section of a template (exit criteria, tune dials, signature) as text, cheaply, late in a long session
 
 Templates turn one-shot edits into repeatable looks. Bundling the whole surface as one paid feature matches how it's used: authoring and applying are two halves of the same workflow.
 
 ### Sensei-backed selections
 
-- `photoshop_select_subject`: Sensei-backed subject isolation
-- `photoshop_select_sky`: Sensei-backed sky selection
+- `ps_select_subject`: Sensei-backed subject isolation
+- `ps_select_sky`: Sensei-backed sky selection
 
 Each returns the same rich feedback bundle as the Community selections (area coverage, edge complexity, partial-versus-full pixel counts), so the AI can verify a selection actually grabbed what was intended before committing. The non-Sensei selection tools (Magic Wand, rectangle, feather) are in Community.
 
 ### Actions and scripting
 
-- `photoshop_list_actions` and `photoshop_play_action`: enumerate and play your recorded Photoshop Actions
-- `photoshop_execute_script`: the escape hatch, arbitrary ExtendScript for when no specific tool fits
+- `ps_list_actions` and `ps_play_action`: enumerate and play your recorded Photoshop Actions
+- `ps_execute_script`: the escape hatch, arbitrary ExtendScript for when no specific tool fits
 
 ### Coming later in Pro
 

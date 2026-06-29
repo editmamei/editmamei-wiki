@@ -31,7 +31,7 @@ to its own cloud, not Editmamei. See [Your AI assistant is a cloud service](#you
 
 ## Diagnostic reports (you generate, you share)
 
-When something breaks, you — or your assistant, via the `photoshop_report_problem` tool or the
+When something breaks, you — or your assistant, via the `ps_report_problem` tool or the
 `editmamei report` command — can generate a **diagnostic bundle**: a single
 `editmamei-diagnostics-<id>.json` file saved to your **Downloads** folder. Editmamei never
 uploads it. You review the file and attach it to a bug report yourself.
@@ -59,7 +59,7 @@ run. These are the keys:
 | `telemetry.diagnostics` | boolean | `false` (off) | Extra sanitized error detail for bug-hunting. The opt-in tier. |
 | `telemetry.install_id` | string | random | Anonymous random ID, minted once, so installs can be counted without identifying you. **Read-only**: you can see it, but it isn't something you set. |
 | `privacy.send_previews_to_llm` | boolean | `true` | Reserved for an upcoming per-feature control over sending visual previews to your AI assistant. |
-| `photoshop_path` | string \| null | `null` | Pin a specific Photoshop binary. `null` = auto-detect (the `PHOTOSHOP_PATH` env var still wins if set). |
+| `ps_path` | string \| null | `null` | Pin a specific Photoshop binary. `null` = auto-detect (the `PHOTOSHOP_PATH` env var still wins if set). |
 | `update_check` | boolean | `true` (on) | Check the public npm registry at startup for a newer version (see "Update check" below). The opt-out tier. |
 
 `install_id` is a random value; it is **not** derived from your username, machine name, email,
@@ -83,7 +83,7 @@ Three equivalent ways, all writing the same `~/.editmamei/settings.json`:
   "privacy": {
     "send_previews_to_llm": true
   },
-  "photoshop_path": null
+  "ps_path": null
 }
 ```
 
@@ -135,7 +135,7 @@ hidden fields.
   "edition": "community",
   "platform": "win32",
   "ps_version": "2026",
-  "tool": "photoshop_add_adjustment_layer",
+  "tool": "ps_add_adjustment_layer",
   "success": true,
   "error_class": null,
   "duration_ms": 612
@@ -152,7 +152,7 @@ hidden fields.
 | `edition` | `community` or `pro`. |
 | `platform` | Operating system only (`win32`, `darwin`, `linux`). |
 | `ps_version` | Your Photoshop version (e.g. `2026`), or `unknown`. |
-| `tool` | The tool name that ran (e.g. `photoshop_add_adjustment_layer`). |
+| `tool` | The tool name that ran (e.g. `ps_add_adjustment_layer`). |
 | `success` | Whether the call succeeded. |
 | `error_class` | On failure, a short error **category** (e.g. `missing_pixel_layer`), never a message or free text. `null` on success. |
 | `duration_ms` | How long the call took, in milliseconds. |

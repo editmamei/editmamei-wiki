@@ -12,7 +12,7 @@ With Photoshop open and the MCP client you want to use restarted (any of Claude 
 
 > "Is Photoshop connected? What version is running?"
 
-The AI calls `photoshop_ping`, which reports whether Photoshop is connected and what version is running. You'll see something like:
+The AI calls `ps_ping`, which reports whether Photoshop is connected and what version is running. You'll see something like:
 
 > Yes, Photoshop is connected. You're running Photoshop 2026 (version 27.7.0) on Windows.
 
@@ -24,7 +24,7 @@ If you instead see "tool not found" or a connection error, jump to [Troubleshoot
 
 > "Open `C:\Users\me\Pictures\test.jpg` in Photoshop and tell me the dimensions and color profile."
 
-The AI calls `photoshop_open_document` and `photoshop_get_metadata`. You'll see the document appear in Photoshop and the AI report back with the file's dimensions, color mode, and embedded ICC profile.
+The AI calls `ps_open_document` and `photoshop_get_metadata`. You'll see the document appear in Photoshop and the AI report back with the file's dimensions, color mode, and embedded ICC profile.
 
 Use any path that points to an image file you have. JPEG, PNG, TIFF, PSD, DNG, and most raw formats are supported.
 
@@ -34,7 +34,7 @@ Use any path that points to an image file you have. JPEG, PNG, TIFF, PSD, DNG, a
 
 > "Add a Curves adjustment layer named 'tone' that gently lifts the shadows."
 
-The AI calls `photoshop_add_adjustment_layer` with `type: "curves"` and appropriate curve points. You should see the new adjustment layer appear in the Photoshop Layers panel, and the document should visibly brighten in the shadows.
+The AI calls `ps_add_adjustment_layer` with `type: "curves"` and appropriate curve points. You should see the new adjustment layer appear in the Photoshop Layers panel, and the document should visibly brighten in the shadows.
 
 Editmamei always prefers non-destructive operations (adjustment layers, masks, and Smart Objects) over destructive bakes, so you can iterate without losing data.
 
@@ -44,7 +44,7 @@ Editmamei always prefers non-destructive operations (adjustment layers, masks, a
 
 > "Show me what the image looks like now."
 
-The AI calls `photoshop_get_preview`, which returns a downscaled JPEG of the current document state inline. This is how the AI sees its own work. You can ask it to compare against the original, evaluate exposure, or check if a particular edit landed.
+The AI calls `ps_get_preview`, which returns a downscaled JPEG of the current document state inline. This is how the AI sees its own work. You can ask it to compare against the original, evaluate exposure, or check if a particular edit landed.
 
 ---
 
@@ -52,7 +52,7 @@ The AI calls `photoshop_get_preview`, which returns a downscaled JPEG of the cur
 
 > "Save the layered PSD next to the original and export a 2400px JPEG to the same folder."
 
-The AI calls `photoshop_save_psd` for the PSD and `photoshop_export_jpeg` for the JPEG (`photoshop_export_png` is also available for PNG output). Both files appear in your filesystem at the specified paths.
+The AI calls `ps_save_psd` for the PSD and `photoshop_export_jpeg` for the JPEG (`photoshop_export_png` is also available for PNG output). Both files appear in your filesystem at the specified paths.
 
 ---
 
@@ -68,7 +68,7 @@ Once the basics work, try one of these:
 
 > "Click the background near the subject with photoshop_magic_wand (tolerance 30, anti_alias true), feather the selection 2 pixels, invert the selection, then add a Curves adjustment layer clipped to that selection that gently warms the skin tones."
 
-*(Sensei-backed `photoshop_select_subject` does the same thing in one call but is a Pro tool; see [pro-features.md](pro-features.md).)*
+*(Sensei-backed `ps_select_subject` does the same thing in one call but is a Pro tool; see [pro-features.md](pro-features.md).)*
 
 **Reproduce an aesthetic later (Pro):**
 
@@ -117,7 +117,7 @@ Your MCP client didn't pick up the Editmamei registration. Check:
 
 ### When no specific tool covers what you need: the escape hatch
 
-If you hit a Photoshop operation Editmamei doesn't have a dedicated tool for, the AI can fall back to `photoshop_execute_script`, which sends an ExtendScript snippet directly to Photoshop and returns the result. This is the safety valve for edge cases the dedicated tool surface hasn't grown into yet; whether the AI reaches for it on its own depends on the AI client. If the AI seems stuck on "no tool for this," ask it to use `photoshop_execute_script` explicitly.
+If you hit a Photoshop operation Editmamei doesn't have a dedicated tool for, the AI can fall back to `ps_execute_script`, which sends an ExtendScript snippet directly to Photoshop and returns the result. This is the safety valve for edge cases the dedicated tool surface hasn't grown into yet; whether the AI reaches for it on its own depends on the AI client. If the AI seems stuck on "no tool for this," ask it to use `ps_execute_script` explicitly.
 
 ### Photoshop version support
 
@@ -125,7 +125,7 @@ Editmamei is tested against **Photoshop 2026 (internal version 27.x)**, the only
 
 PS 2026 introduced a few descriptor changes that affected some adjustment-layer and selection paths; current builds work around the known ones. If you hit a tool that fails (on PS 2026 or any other version), [open an issue](https://github.com/editmamei/editmamei-wiki/issues) and include the output of `editmamei status` plus the relevant snippet from `~/.editmamei/sessions/<session-id>.ndjson`. Please mention your Photoshop version so we can route the bug correctly.
 
-### `photoshop_ping` hangs or times out
+### `ps_ping` hangs or times out
 
 Photoshop isn't responding to the automation request. Common causes:
 
@@ -134,7 +134,7 @@ Photoshop isn't responding to the automation request. Common causes:
 - **Photoshop is busy.** If a modal dialog is open (e.g. an unsaved-changes prompt, an Adobe sign-in modal), dismiss it and retry.
 - **macOS automation permissions.** First time only: macOS will prompt you to allow the MCP client to control Photoshop. Approve it in System Settings → Privacy & Security → Automation.
 
-### "Parameters not valid" on `photoshop_select_subject` / `photoshop_select_sky`
+### "Parameters not valid" on `ps_select_subject` / `ps_select_sky`
 
 These Pro tools depend on Adobe's Sensei (cloud) AI features. The error usually means the Device-side model isn't downloaded.
 
